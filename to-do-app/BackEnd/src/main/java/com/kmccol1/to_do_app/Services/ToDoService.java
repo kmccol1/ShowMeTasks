@@ -19,7 +19,7 @@ public class ToDoService
         this.toDoRepository = toDoRepository;
     }
 
-    public List<ToDoObj> getAllToDoItems()
+    public List<ToDoObj> getAllToDoObjs()
     {
         return (List<ToDoObj>) toDoRepository.findAll();
     }

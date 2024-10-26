@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/todos")
+@CrossOrigin(origins = "http://localhost:3000")
 public class ToDoController
 {
     @Autowired
@@ -17,7 +18,7 @@ public class ToDoController
     @GetMapping
     public List<ToDoObj> getAllToDoObjs()
     {
-        return toDoService.getAllToDoItems();
+        return toDoService.getAllToDoObjs();
     }
 
     @PostMapping

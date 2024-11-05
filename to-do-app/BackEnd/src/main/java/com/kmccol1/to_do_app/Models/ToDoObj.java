@@ -1,9 +1,8 @@
 package com.kmccol1.to_do_app.Models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
 
 @Entity
 public class ToDoObj
@@ -12,9 +11,30 @@ public class ToDoObj
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String title;
+    private String description;
 
-    private boolean completed;
+    private Boolean completed;
+
+    private LocalDateTime createdAt;
+
+    // Foreign key to associate with a TaskList
+    @ManyToOne
+    @JoinColumn(name = "task_list_id")
+    private TaskList taskList;
+
+    // Default constructor
+    public ToDoObj()
+    {
+
+    }
+
+    public ToDoObj(String description, Boolean completed, LocalDateTime createdAt, TaskList taskList)
+    {
+        this.description = description;
+        this.completed = completed;
+        this.createdAt = createdAt;
+        this.taskList = taskList;
+    }
 
     //Getters and setters...
     public Integer getId()
@@ -22,23 +42,43 @@ public class ToDoObj
         return id;
     }
 
-    public String getTitle()
+    public String getDescription()
     {
-        return title;
+        return description;
     }
 
-    public void setTitle(String title)
+    public void setDescription(String description)
     {
-        this.title = title;
+        this.description = description;
     }
 
-    public boolean isCompleted()
+    public Boolean getCompleted()
     {
         return completed;
     }
 
-    public void setCompleted(boolean completed)
+    public void setCompleted(Boolean completed)
     {
         this.completed = completed;
+    }
+
+    public LocalDateTime getCreatedAt()
+    {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt)
+    {
+        this.createdAt = createdAt;
+    }
+
+    public TaskList getTaskList()
+    {
+        return taskList;
+    }
+
+    public void setTaskList(TaskList taskList)
+    {
+        this.taskList = taskList;
     }
 }

@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import Register from './components/Register';
 import Login from './components/Login';
-import CreateTaskList from './components/CreateTaskList'; // Import here
+import CreateTaskList from './components/CreateTaskList';
 import AddToDo from './components/AddToDo';
 import ToDoList from './components/ToDoList';
-import { Container } from '@mui/material';
+import { Container, Typography, Card, CardContent, Button, Tabs, Tab, Box } from '@mui/material';
 
 const ToDoApp = () => {
     const [user, setUser] = useState(null); // State for the logged-in user
     const [taskLists, setTaskLists] = useState([]);
     const [selectedTaskListId, setSelectedTaskListId] = useState(null);
     const [todos, setTodos] = useState([]); // State for tasks in the selected task list
+    const [tabValue, setTabValue] = useState(0);
 
     useEffect(() => {
         if (user) {
@@ -47,7 +48,7 @@ const ToDoApp = () => {
 
     const fetchTodos = async (taskListId) => {
         try {
-            const response = await fetch(`http://localhost:8080/api/todos/list/${taskListId}/tasks`); // Adjust the endpoint to fetch todos for a task list
+            const response = await fetch(`http://localhost:8080/api/todos/list/${taskListId}/tasks`);
             const data = await response.json();
             setTodos(data); // Set the todos state with fetched data
         } catch (error) {
@@ -66,26 +67,54 @@ const ToDoApp = () => {
         }
     };
 
+    const handleTabChange = (event, newValue) => {
+        setTabValue(newValue);
+        setSelectedTaskListId(taskLists[newValue].id); // Update selected task list based on tab
+    };
+
     return (
-        <Container>
-            <h1>ToDo App</h1>
+        <Container maxWidth="md">
+            <Typography variant="h4" align="center" gutterBottom>
+                ToDo App
+            </Typography>
             {!user ? (
-                <>
+                <Card variant="outlined" style={{ margin: '20px', padding: '20px' }}>
+                    <Typography variant="h6" align="center" gutterBottom>
+                        Welcome! Register or Login to get started.
+                    </Typography>
                     <Register onRegister={handleRegister} />
                     <Login onLogin={handleLogin} />
-                </>
+                </Card>
             ) : (
                 <>
-                    <CreateTaskList username={user.username} /> {/* Include CreateTaskList here */}
-                    <div>
-                        <select onChange={(e) => setSelectedTaskListId(e.target.value)} value={selectedTaskListId}>
-                            {taskLists.map(list => (
-                                <option key={list.id} value={list.id}>{list.name}</option>
+                    <Card variant="outlined" style={{ margin: '20px', padding: '20px' }}>
+                        <Typography variant="h6" gutterBottom>
+                            Create a New Task List
+                        </Typography>
+                        <CreateTaskList username={user.username} />
+                    </Card>
+                    
+                    <Box sx={{ borderBottom: 1, borderColor: 'divider', marginTop: 2 }}>
+                        <Tabs value={tabValue} onChange={handleTabChange} variant="scrollable" scrollButtons="auto">
+                            {taskLists.map((list, index) => (
+                                <Tab key={list.id} label={list.name} />
                             ))}
-                        </select>
-                    </div>
-                    <AddToDo taskListId={selectedTaskListId} onAdd={(newTask) => setTodos([...todos, newTask])} />
-                    <ToDoList todos={todos} onDelete={handleDelete} /> {/* Pass handleDelete as prop */}
+                        </Tabs>
+                    </Box>
+
+                    <Card variant="outlined" style={{ margin: '20px', padding: '20px' }}>
+                        <Typography variant="h6" gutterBottom>
+                            Add a New Task
+                        </Typography>
+                        <AddToDo taskListId={selectedTaskListId} onAdd={(newTask) => setTodos([...todos, newTask])} />
+                    </Card>
+                    
+                    <Card variant="outlined" style={{ margin: '20px', padding: '20px' }}>
+                        <Typography variant="h6" gutterBottom>
+                            Tasks in {taskLists[tabValue]?.name || 'your list'}
+                        </Typography>
+                        <ToDoList todos={todos} onDelete={handleDelete} />
+                    </Card>
                 </>
             )}
         </Container>

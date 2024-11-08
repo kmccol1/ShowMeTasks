@@ -3,35 +3,38 @@ import { TextField, Button } from '@mui/material';
 
 const Register = ({ onRegister }) => {
     const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        
-        const apiUrl = 'http://localhost:8080/api/auth/register'; // Update with your API endpoint
+    e.preventDefault();
+    
+    const apiUrl = 'http://localhost:8080/api/auth/register';
 
-        try {
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ username, password }),
-            });
+    try {
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, email, password }),
+        });
 
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            const newUser = await response.json();
-            console.log('User registered:', newUser);
-            onRegister(newUser); // Call the onRegister function to update the state in the parent component
-            setUsername(''); // Clear the input fields
-            setPassword('');
-        } catch (error) {
-            console.error('Error registering user:', error);
+        if (!response.ok) {
+            const errorResponse = await response.json();
+            throw new Error(errorResponse.error || 'Network response was not ok');
         }
-    };
+
+        const newUser = await response.json();
+        console.log('User registered:', newUser);
+        onRegister(newUser); // Call the onRegister function to update the state in the parent component
+        setUsername(''); // Clear the input fields
+        setEmail(''); // Clear email field
+        setPassword('');
+    } catch (error) {
+        console.error('Error registering user:', error.message);
+    }
+};
 
     return (
         <form onSubmit={handleSubmit}>
@@ -39,6 +42,14 @@ const Register = ({ onRegister }) => {
                 label="Username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+                variant="outlined"
+                fullWidth
+                margin="normal"
+            />
+            <TextField
+                label="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 variant="outlined"
                 fullWidth
                 margin="normal"

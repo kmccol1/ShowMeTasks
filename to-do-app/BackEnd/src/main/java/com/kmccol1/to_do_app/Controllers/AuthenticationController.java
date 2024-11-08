@@ -17,8 +17,12 @@ import org.springframework.web.bind.annotation.*;
 
 import com.kmccol1.to_do_app.payload.LoginRequest;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin(origins = "http://localhost:3000")
 public class AuthenticationController {
 
     @Autowired
@@ -34,9 +38,15 @@ public class AuthenticationController {
     public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest registerRequest) {
         try {
             User registeredUser = userService.registerUser(registerRequest);
-            return ResponseEntity.ok("User registered successfully: " + registeredUser.getUsername());
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "User registered successfully");
+            response.put("username", registeredUser.getUsername());
+            return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            e.printStackTrace(); // For debugging purposes
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", e.getMessage());
+            return ResponseEntity.badRequest().body(errorResponse);
         }
     }
 

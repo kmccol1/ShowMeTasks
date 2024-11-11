@@ -20,17 +20,18 @@ const Login = ({ onLogin }) => {
         });
 
         if (!response.ok) {
-            if (response.status === 403) {
-                console.error('Access forbidden: Invalid credentials or insufficient permissions');
-            } else {
-                console.error('Network response was not ok');
-            }
+            console.error(response.status === 403 ? 'Invalid credentials' : 'Network error');
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const user = await response.json();
-        console.log('User logged in:', user);
-        onLogin(user);
+        const data = await response.json();
+        const { token } = data; // assuming the API sends a token
+
+        // Save token to local storage
+        localStorage.setItem('authToken', token);
+
+        // Set user as logged in
+        onLogin(data);
         setUsername('');
         setPassword('');
     } catch (error) {

@@ -4,33 +4,51 @@ import Login from './components/Login';
 import CreateTaskList from './components/CreateTaskList';
 import AddToDo from './components/AddToDo';
 import ToDoList from './components/ToDoList';
-import { Container, Typography, Card, CardContent, Button, Tabs, Tab, Box } from '@mui/material';
+import { Container, Typography, Card, Box, Tabs, Tab, Button } from '@mui/material';
 
 const ToDoApp = () => {
-    const [user, setUser] = useState(null); // State for the logged-in user
+    const [user, setUser] = useState(null);
     const [taskLists, setTaskLists] = useState([]);
     const [selectedTaskListId, setSelectedTaskListId] = useState(null);
-    const [todos, setTodos] = useState([]); // State for tasks in the selected task list
+    const [todos, setTodos] = useState([]);
     const [tabValue, setTabValue] = useState(0);
 
     useEffect(() => {
+        const token = localStorage.getItem('authToken');
+        const username = localStorage.getItem('username');
+        if (token && username) {
+            setUser({ username, token });
+        }
+    }, []);
+
+    useEffect(() => {
         if (user) {
-            fetchTaskLists(user.username); // Fetch task lists if user is logged in
+            fetchTaskLists(user.username);
         }
     }, [user]);
 
     useEffect(() => {
         if (selectedTaskListId) {
-            fetchTodos(selectedTaskListId); // Fetch todos when selected task list changes
+            fetchTodos(selectedTaskListId);
         }
     }, [selectedTaskListId]);
 
     const handleRegister = (newUser) => {
-        setUser(newUser); // Set user state on registration
+        setUser(newUser);
+        localStorage.setItem('authToken', newUser.token);
+        localStorage.setItem('username', newUser.username);
     };
 
     const handleLogin = (loggedInUser) => {
-        setUser(loggedInUser); // Set user state on login
+        setUser(loggedInUser);
+        localStorage.setItem('authToken', loggedInUser.token);
+        localStorage.setItem('username', loggedInUser.username);
+    };
+
+    const handleLogout = () => {
+        setUser(null);
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('username');
     };
 
     const fetchTaskLists = async (username) => {
@@ -39,7 +57,7 @@ const ToDoApp = () => {
             const data = await response.json();
             setTaskLists(data);
             if (data.length > 0) {
-                setSelectedTaskListId(data[0].id); // Automatically select the first task list
+                setSelectedTaskListId(data[0].id);
             }
         } catch (error) {
             console.error('Error fetching task lists:', error);
@@ -50,7 +68,7 @@ const ToDoApp = () => {
         try {
             const response = await fetch(`http://localhost:8080/api/todos/list/${taskListId}/tasks`);
             const data = await response.json();
-            setTodos(data); // Set the todos state with fetched data
+            setTodos(data);
         } catch (error) {
             console.error('Error fetching todos:', error);
         }
@@ -61,7 +79,7 @@ const ToDoApp = () => {
             await fetch(`http://localhost:8080/api/todos/${todoId}`, {
                 method: 'DELETE',
             });
-            setTodos(todos.filter(todo => todo.id !== todoId)); // Update state to remove deleted todo
+            setTodos(todos.filter(todo => todo.id !== todoId));
         } catch (error) {
             console.error('Error deleting todo:', error);
         }
@@ -69,7 +87,7 @@ const ToDoApp = () => {
 
     const handleTabChange = (event, newValue) => {
         setTabValue(newValue);
-        setSelectedTaskListId(taskLists[newValue].id); // Update selected task list based on tab
+        setSelectedTaskListId(taskLists[newValue].id);
     };
 
     return (
@@ -87,6 +105,9 @@ const ToDoApp = () => {
                 </Card>
             ) : (
                 <>
+                    <Button variant="contained" onClick={handleLogout}>
+                        Logout
+                    </Button>
                     <Card variant="outlined" style={{ margin: '20px', padding: '20px' }}>
                         <Typography variant="h6" gutterBottom>
                             Create a New Task List

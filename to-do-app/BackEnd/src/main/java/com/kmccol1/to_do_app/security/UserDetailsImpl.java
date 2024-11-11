@@ -5,6 +5,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Collections;
 
 public class UserDetailsImpl implements UserDetails
 {
@@ -24,15 +25,13 @@ public class UserDetailsImpl implements UserDetails
         this.authorities = authorities;
     }
 
-    public static UserDetailsImpl build(User user)
-    {
-        // Here, you will build UserDetailsImpl from the User entity.
+    public static UserDetailsImpl build(User user) {
         return new UserDetailsImpl(
                 user.getId(),
                 user.getUsername(),
                 user.getEmail(),
                 user.getPassword(),
-                null // Pass in authorities if you have roles
+                Collections.emptyList() // Use roles if available
         );
     }
 

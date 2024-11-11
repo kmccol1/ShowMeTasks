@@ -3,14 +3,17 @@ package com.kmccol1.to_do_app.Services;
 import com.kmccol1.to_do_app.Data.UserRepository;
 import com.kmccol1.to_do_app.Models.User;
 import com.kmccol1.to_do_app.payload.RegisterRequest;
+import com.kmccol1.to_do_app.security.UserDetailsImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class UserService
+public class UserService implements UserDetailsService
 {
 
     @Autowired
@@ -36,5 +39,13 @@ public class UserService
 
     public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public UserDetailsImpl loadUserByUsername(String username) throws UsernameNotFoundException
+    {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
+        return UserDetailsImpl.build(user);
     }
 }

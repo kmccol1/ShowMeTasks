@@ -6,32 +6,37 @@ const Login = ({ onLogin }) => {
     const [password, setPassword] = useState('');
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
+    e.preventDefault();
 
-        const apiUrl = 'http://localhost:8080/api/auth/login'; // Update with your API endpoint
+    const apiUrl = 'http://localhost:8080/api/auth/signin';
 
-        try {
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ username, password }),
-            });
+    try {
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, password }),
+        });
 
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
+        if (!response.ok) {
+            if (response.status === 403) {
+                console.error('Access forbidden: Invalid credentials or insufficient permissions');
+            } else {
+                console.error('Network response was not ok');
             }
-
-            const user = await response.json();
-            console.log('User logged in:', user);
-            onLogin(user); // Call the onLogin function to update the state in the parent component
-            setUsername(''); // Clear the input fields
-            setPassword('');
-        } catch (error) {
-            console.error('Error logging in user:', error);
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
-    };
+
+        const user = await response.json();
+        console.log('User logged in:', user);
+        onLogin(user);
+        setUsername('');
+        setPassword('');
+    } catch (error) {
+        console.error('Error logging in user:', error);
+    }
+};
 
     return (
         <form onSubmit={handleSubmit}>

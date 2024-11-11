@@ -7,15 +7,16 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 
 @Component
-public class JwtUtils {
-
+public class JwtUtils
+{
     @Value("${jwt.secret}")
     private String jwtSecret;
 
     @Value("${jwt.expirationMs}")
     private int jwtExpirationMs;
 
-    public String generateJwtToken(String username) {
+    public String generateJwtToken(String username)
+    {
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date())
@@ -24,15 +25,20 @@ public class JwtUtils {
                 .compact();
     }
 
-    public String getUserNameFromJwtToken(String token) {
+    public String getUserNameFromJwtToken(String token)
+    {
         return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
     }
 
-    public boolean validateJwtToken(String authToken) {
-        try {
+    public boolean validateJwtToken(String authToken)
+    {
+        try
+        {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
             return true;
-        } catch (JwtException | IllegalArgumentException e) {
+        }
+        catch (JwtException | IllegalArgumentException e)
+        {
             System.out.println("Invalid JWT token: " + e.getMessage());
         }
         return false;

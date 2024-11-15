@@ -1,5 +1,6 @@
 package com.kmccol1.to_do_app.Models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -11,21 +12,30 @@ public class ToDoObj
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(nullable = true)
     private String description;
 
+    @Column(columnDefinition = "BOOLEAN DEFAULT false")
     private Boolean completed;
 
+    @Column(nullable = true)
     private LocalDateTime createdAt;
 
     // Foreign key to associate with a TaskList
+    @JsonBackReference(value = "taskList-tasks") //Prevent json serialization of circular refs...
     @ManyToOne
     @JoinColumn(name = "task_list_id")
     private TaskList taskList;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference(value = "user-tasks") // Prevents serialization of the user in ToDoObj JSON output...
+    private User user;
+
     // Default constructor
     public ToDoObj()
     {
-
+        this.taskList = new TaskList();
     }
 
     public ToDoObj(String description, Boolean completed, LocalDateTime createdAt, TaskList taskList)
@@ -80,5 +90,15 @@ public class ToDoObj
     public void setTaskList(TaskList taskList)
     {
         this.taskList = taskList;
+    }
+
+    public User getUser()
+    {
+        return user;
+    }
+
+    public void setUser(User user)
+    {
+        this.user = user;
     }
 }

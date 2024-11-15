@@ -25,7 +25,6 @@ import java.util.Map;
 @CrossOrigin(origins = "http://localhost:3000")
 public class AuthenticationController
 {
-
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -40,11 +39,33 @@ public class AuthenticationController
     {
         try
         {
+            // Register the user
             User registeredUser = userService.registerUser(registerRequest);
-            Map<String, String> response = new HashMap<>();
-            response.put("message", "User registered successfully");
-            response.put("username", registeredUser.getUsername());
-            return ResponseEntity.ok(response);
+
+            // Authenticate the new user to generate a JWT token
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            registerRequest.getUsername(),
+                            registerRequest.getPassword()
+                    )
+            );
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
+            // Generate a JWT token...with authorities...
+            String jwt = jwtUtils.generateJwtToken(userDetails.getUsername(), userDetails.getAuthorities());
+
+            // Create and return the JwtResponse with the token and user details
+            JwtResponse jwtResponse = new JwtResponse(
+                    jwt,
+                    userDetails.getId(),
+                    userDetails.getUsername(),
+                    userDetails.getEmail(),
+                    userDetails.getAuthorities()
+            );
+
+            return ResponseEntity.ok(jwtResponse);
         }
         catch (RuntimeException e)
         {
@@ -63,13 +84,18 @@ public class AuthenticationController
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // Cast to UserDetailsImpl instead of User
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
-        String jwt = jwtUtils.generateJwtToken(userDetails.getUsername());
+        // Generate token with roles
+        String jwt = jwtUtils.generateJwtToken(userDetails.getUsername(), userDetails.getAuthorities());
 
-        // Create and return the JwtResponse object
-        JwtResponse jwtResponse = new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail());
+        JwtResponse jwtResponse = new JwtResponse(
+                jwt,
+                userDetails.getId(),
+                userDetails.getUsername(),
+                userDetails.getEmail(),
+                userDetails.getAuthorities()
+        );
 
         return ResponseEntity.ok(jwtResponse);
     }

@@ -8,10 +8,11 @@ const Register = ({ onRegister }) => {
 
     const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const apiUrl = 'http://localhost:8080/api/auth/register';
 
-    try {
+    try
+	{
         const response = await fetch(apiUrl, {
             method: 'POST',
             headers: {
@@ -20,18 +21,21 @@ const Register = ({ onRegister }) => {
             body: JSON.stringify({ username, email, password }),
         });
 
-        if (!response.ok) {
+        if (!response.ok)
+		{
             const errorResponse = await response.json();
             throw new Error(errorResponse.error || 'Network response was not ok');
         }
 
         const newUser = await response.json();
         console.log('User registered:', newUser);
-        onRegister(newUser); // Call the onRegister function to update the state in the parent component
-        setUsername(''); // Clear the input fields
-        setEmail(''); // Clear email field
+        onRegister(newUser);
+        setUsername('');
+        setEmail('');
         setPassword('');
-    } catch (error) {
+    }
+	catch (error)
+	{
         console.error('Error registering user:', error.message);
     }
 };

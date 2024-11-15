@@ -14,64 +14,36 @@ import java.util.List;
 @Service
 public class ToDoService
 {
-    private final ToDoRepository toDoRepository;
-    private final TaskListRepository taskListRepository;
+    @Autowired
+    private ToDoRepository toDoRepository;
 
     @Autowired
-    public ToDoService(ToDoRepository toDoRepository, TaskListRepository taskListRepository)
-    {
-        this.toDoRepository = toDoRepository;
-        this.taskListRepository = taskListRepository;
-    }
+    private TaskListRepository taskListRepository;
 
-    // Method to fetch all tasks
-    public List<ToDoObj> getAllToDoObjs()
+    /**
+     * Creates a new ToDo task for a user within a TaskList.
+     */
+    public ToDoObj createToDoForTaskList(ToDoObj toDoObj, TaskList taskList)
     {
-        return (List<ToDoObj>) toDoRepository.findAll();
-    }
-
-    // Method to save a task
-    public ToDoObj saveToDoObj(ToDoObj toDoObj)
-    {
+        toDoObj.setTaskList(taskList);
         return toDoRepository.save(toDoObj);
     }
 
-    // Method to delete a task by ID
-    public void deleteToDoObj(Integer id)
+    /**
+     * Fetch all ToDo tasks for a specific user.
+     */
+    public List<ToDoObj> getToDosByUser(User user)
     {
-        toDoRepository.deleteById(id);
+        return toDoRepository.findByUser(user);
     }
 
-    // Method to create a new task list for a user
-    public TaskList createTaskList(User user, String name)
+    /**
+     * Fetch all ToDo tasks for a specific TaskList.
+     */
+    public List<ToDoObj> getToDosByTaskList(TaskList taskList)
     {
-        TaskList taskList = new TaskList(name, user);
-        return taskListRepository.save(taskList);
+        return toDoRepository.findByTaskList(taskList);
     }
 
-    // Method to retrieve all task lists for a specific user
-    public List<TaskList> getTaskListsByUser(User user)
-    {
-        return taskListRepository.findByUser(user);
-    }
-
-    // Method to retrieve all tasks in a specific task list
-    public List<ToDoObj> getTasksByTaskList(TaskList taskList)
-    {
-        return taskList.getTasks();
-    }
-
-    // Method to add a new task to a specific task list
-    public ToDoObj createTaskInList(String description, TaskList taskList)
-    {
-        ToDoObj task = new ToDoObj(description, false, LocalDateTime.now(), taskList);
-        return toDoRepository.save(task);
-    }
-
-    // Method to get a TaskList by ID
-    public TaskList getTaskListById(Integer taskListId)
-    {
-        return taskListRepository.findById(taskListId)
-                .orElseThrow(() -> new RuntimeException("Task list not found"));
-    }
+    // Other methods...
 }

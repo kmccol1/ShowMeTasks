@@ -2,10 +2,12 @@ package com.kmccol1.to_do_app.security;
 
 import com.kmccol1.to_do_app.Models.User;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class UserDetailsImpl implements UserDetails
 {
@@ -25,13 +27,19 @@ public class UserDetailsImpl implements UserDetails
         this.authorities = authorities;
     }
 
-    public static UserDetailsImpl build(User user) {
+    public static UserDetailsImpl build(User user)
+    {
+        // Map User roles to GrantedAuthorities
+        Set<GrantedAuthority> authorities = user.getRoles().stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .collect(Collectors.toSet());
+
         return new UserDetailsImpl(
                 user.getId(),
                 user.getUsername(),
                 user.getEmail(),
                 user.getPassword(),
-                Collections.emptyList() // Use roles if available
+                authorities
         );
     }
 
@@ -66,24 +74,24 @@ public class UserDetailsImpl implements UserDetails
     @Override
     public boolean isAccountNonExpired()
     {
-        return true; // Implement as needed
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked()
     {
-        return true; // Implement as needed
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired()
     {
-        return true; // Implement as needed
+        return true;
     }
 
     @Override
     public boolean isEnabled()
     {
-        return true; // Implement as needed
+        return true;
     }
 }

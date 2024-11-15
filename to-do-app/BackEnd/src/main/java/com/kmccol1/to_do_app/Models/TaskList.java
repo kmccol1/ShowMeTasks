@@ -1,5 +1,6 @@
 package com.kmccol1.to_do_app.Models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -7,7 +8,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "task_lists")
-public class TaskList {
+public class TaskList
+{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +23,7 @@ public class TaskList {
     private User user;
 
     // Define a relationship with Task
+    @JsonManagedReference(value = "taskList-tasks")
     @OneToMany(mappedBy = "taskList", cascade = CascadeType.ALL)
     private List<ToDoObj> tasks = new ArrayList<>();
 

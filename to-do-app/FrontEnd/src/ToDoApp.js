@@ -12,23 +12,36 @@ const ToDoApp = () => {
     const [selectedTaskListId, setSelectedTaskListId] = useState(null);
     const [todos, setTodos] = useState([]);
     const [tabValue, setTabValue] = useState(0);
+	const [isLoggedIn, setIsLoggedIn] = useState(false); //Track login status...
 
     useEffect(() => {
-        const token = localStorage.getItem('authToken');
-        const username = localStorage.getItem('username');
-        if (token && username) {
-            setUser({ username, token });
-        }
-    }, []);
+		const token = localStorage.getItem('authToken');
+		const username = localStorage.getItem('username');
+		
+		console.log("Token from localStorage:", token); // Log the token to see its value
+		console.log("Username from localStorage:", username);
+
+		if (token && username)
+		{
+			console.log('Setting user state with:', { username, token });
+			setUser({ username, token });
+			setIsLoggedIn(true);
+		} else
+		{
+			console.log('Token or username missing, user not logged in.');
+		}
+	}, []);
 
     useEffect(() => {
-        if (user) {
+        if (user && isLoggedIn)
+		{
             fetchTaskLists(user.username);
         }
-    }, [user]);
+    }, [user, isLoggedIn]);
 
     useEffect(() => {
-        if (selectedTaskListId) {
+        if (selectedTaskListId)
+		{
             fetchTodos(selectedTaskListId);
         }
     }, [selectedTaskListId]);
@@ -37,53 +50,125 @@ const ToDoApp = () => {
         setUser(newUser);
         localStorage.setItem('authToken', newUser.token);
         localStorage.setItem('username', newUser.username);
+		setIsLoggedIn(true); //Set login status to true...
     };
 
-    const handleLogin = (loggedInUser) => {
-        setUser(loggedInUser);
-        localStorage.setItem('authToken', loggedInUser.token);
-        localStorage.setItem('username', loggedInUser.username);
+    const handleLogin = async (loggedInUser) => {
+		console.log("Logged in user: ", loggedInUser); // Check the user object
+		if (loggedInUser.token)
+		{
+			localStorage.setItem('authToken', loggedInUser.token); // Ensure the token is being saved
+			localStorage.setItem('username', loggedInUser.username);
+			setUser(loggedInUser);
+			setIsLoggedIn(true);
+		}
+		else
+		{
+			console.error('No token received from the backend.');
+		}
     };
 
     const handleLogout = () => {
         setUser(null);
         localStorage.removeItem('authToken');
         localStorage.removeItem('username');
+		setIsLoggedIn(false); //Set login status to false...
     };
 
-    const fetchTaskLists = async (username) => {
-        try {
-            const response = await fetch(`http://localhost:8080/api/todos/list/${username}`);
-            const data = await response.json();
-            setTaskLists(data);
-            if (data.length > 0) {
-                setSelectedTaskListId(data[0].id);
-            }
-        } catch (error) {
-            console.error('Error fetching task lists:', error);
-        }
-    };
+	const fetchTaskLists = async (username) => {
+		try
+		{
+			const token = localStorage.getItem('authToken');
+			const response = await fetch(`http://localhost:8080/api/todos/list/${username}`, {
+				headers: {
+					'Authorization': `Bearer ${token}`,
+				},
+			});
 
-    const fetchTodos = async (taskListId) => {
-        try {
-            const response = await fetch(`http://localhost:8080/api/todos/list/${taskListId}/tasks`);
-            const data = await response.json();
-            setTodos(data);
-        } catch (error) {
-            console.error('Error fetching todos:', error);
-        }
-    };
+			if (!response.ok)
+			{
+				throw new Error('Failed to fetch task lists');
+			}
 
-    const handleDelete = async (todoId) => {
-        try {
-            await fetch(`http://localhost:8080/api/todos/${todoId}`, {
-                method: 'DELETE',
-            });
-            setTodos(todos.filter(todo => todo.id !== todoId));
-        } catch (error) {
-            console.error('Error deleting todo:', error);
-        }
-    };
+			// Check if the response body is empty
+			const text = await response.text();
+			if (text)
+			{
+				const data = JSON.parse(text); // Manually parse JSON if text is present
+				if (!data || data.length === 0)
+				{
+					console.log('No task lists found');
+					setTaskLists([]); // Empty list if none are found
+				}
+				else
+				{
+					setTaskLists(data);
+					setSelectedTaskListId(data[0].id);
+				}
+			}
+			else
+			{
+				console.error('Received empty response');
+				setTaskLists([]);
+			}
+		}
+		catch (error)
+		{
+			console.error('Error fetching task lists:', error);
+			setTaskLists([]); // Set to empty if error occurs
+		}
+	};
+
+	const fetchTodos = async (taskListId) => {
+		try
+		{
+			const token = localStorage.getItem('authToken');
+			const response = await fetch(`http://localhost:8080/api/todos/${taskListId}`, {
+				headers: {
+					'Authorization': `Bearer ${token}`,
+				},
+			});
+
+			if (!response.ok)
+			{
+				throw new Error('Failed to fetch todos');
+			}
+
+			const text = await response.text();
+			if (text)
+			{
+				const data = JSON.parse(text); // Manually parse JSON
+				setTodos(data);
+			}
+			else
+			{
+				console.error('Received empty response for todos');
+				setTodos([]);
+			}
+		}
+		catch (error)
+		{
+			console.error('Error fetching todos:', error);
+		}
+	};
+
+	const handleDelete = async (todoId) => {
+		try
+		{
+			const token = localStorage.getItem('authToken');
+			await fetch(`http://localhost:8080/api/todos/${todoId}`, {
+				method: 'DELETE',
+				headers: {
+					'Authorization': `Bearer ${token}`,
+				},
+			});
+			setTodos(todos.filter(todo => todo.id !== todoId));
+		}
+		catch (error)
+		{
+			console.error('Error deleting todo:', error);
+		}
+	};
 
     const handleTabChange = (event, newValue) => {
         setTabValue(newValue);
@@ -95,7 +180,7 @@ const ToDoApp = () => {
             <Typography variant="h4" align="center" gutterBottom>
                 ToDo App
             </Typography>
-            {!user ? (
+            {!isLoggedIn ? ( // Render login/register if not logged in
                 <Card variant="outlined" style={{ margin: '20px', padding: '20px' }}>
                     <Typography variant="h6" align="center" gutterBottom>
                         Welcome! Register or Login to get started.
@@ -103,7 +188,7 @@ const ToDoApp = () => {
                     <Register onRegister={handleRegister} />
                     <Login onLogin={handleLogin} />
                 </Card>
-            ) : (
+            ) : ( // Render app content if logged in
                 <>
                     <Button variant="contained" onClick={handleLogout}>
                         Logout
@@ -112,7 +197,11 @@ const ToDoApp = () => {
                         <Typography variant="h6" gutterBottom>
                             Create a New Task List
                         </Typography>
-                        <CreateTaskList username={user.username} />
+                        {user && user.token ? (
+                            <CreateTaskList user={user} />
+                         ) : (
+                           <Typography variant="body1">Loading user...</Typography>
+                       )}
                     </Card>
                     
                     <Box sx={{ borderBottom: 1, borderColor: 'divider', marginTop: 2 }}>

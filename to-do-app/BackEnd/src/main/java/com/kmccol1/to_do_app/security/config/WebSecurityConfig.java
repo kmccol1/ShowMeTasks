@@ -1,7 +1,12 @@
 package com.kmccol1.to_do_app.security.config;
 
+import com.kmccol1.to_do_app.Services.UserService;
+import com.kmccol1.to_do_app.security.JwtAuthenticationFilter;
+import com.kmccol1.to_do_app.security.jwt.JwtUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,6 +15,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -20,12 +26,25 @@ import java.util.List;
 @EnableWebSecurity
 public class WebSecurityConfig
 {
+    private final JwtUtils jwtUtils;
+
+    @Autowired
+    @Lazy
+    private final UserService userService;
+
+    public WebSecurityConfig(JwtUtils jwtUtils, UserService userService)
+    {
+        this.jwtUtils = jwtUtils;
+        this.userService = userService;
+    }
+
     @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
+    public CorsConfigurationSource corsConfigurationSource()
+    {
         var corsConfig = new CorsConfiguration();
         corsConfig.setAllowedOrigins(List.of("http://localhost:3000"));
         corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        corsConfig.setAllowedHeaders(List.of("*"));
+        corsConfig.setAllowedHeaders(List.of("Authorization", "Content-Type", "*"));
         corsConfig.setAllowCredentials(true);
         var source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfig);
@@ -33,19 +52,29 @@ public class WebSecurityConfig
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(AbstractHttpConfigurer::disable) // Disables CSRF protection
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception
+    {
+        http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll() // Allow public access to auth endpoints
-                        .anyRequest().authenticated() // Require authentication for other requests
-                ).cors(cors -> cors.configurationSource(corsConfigurationSource()));
-
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/todos/**").hasRole("USER")
+                        .anyRequest().authenticated()
+                )
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .addFilterBefore(new JwtAuthenticationFilter(jwtUtils, userService), UsernamePasswordAuthenticationFilter.class);  // Use the bean here
         return http.build();
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public JwtAuthenticationFilter jwtAuthenticationFilter()
+    {
+        return new JwtAuthenticationFilter(jwtUtils, userService);
+    }
+
+    @Bean
+    @Lazy
+    public PasswordEncoder passwordEncoder()
+    {
         return new BCryptPasswordEncoder();
     }
 

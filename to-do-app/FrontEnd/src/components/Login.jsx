@@ -25,16 +25,28 @@ const Login = ({ onLogin }) => {
         }
 
         const data = await response.json();
-        const { token } = data; // assuming the API sends a token
-
-        // Save token to local storage
-        localStorage.setItem('authToken', token);
-
+		console.log("Login response: ", data); //For debugging purposes...
+		
+		const { token } = data;
+		
+		//Save the token to local browser storage...
+		if (token)
+		{
+			// Save token to local storage
+            localStorage.setItem('authToken', token);
+		}
+		else
+		{
+			console.error('Token missing in response: ', data);
+		}
+		
         // Set user as logged in
         onLogin(data);
         setUsername('');
         setPassword('');
-    } catch (error) {
+    }
+	catch (error)
+	{
         console.error('Error logging in user:', error);
     }
 };

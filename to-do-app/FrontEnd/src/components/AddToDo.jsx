@@ -9,16 +9,21 @@ const AddToDo = ({ taskListId, onAdd }) => {
         
         const apiUrl = `http://localhost:8080/api/todos/create?taskListId=${taskListId}&description=${text}`;
 
-        try {
+        try
+		{
+            // Retrieve token from local storage
+            const token = localStorage.getItem('authToken');
+
             const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ description: text }), // This is not needed; your controller already handles description as a query param
+                    'Authorization': `Bearer ${token}` // Include token in the Authorization header
+                }
             });
 
-            if (!response.ok) {
+            if (!response.ok)
+			{
                 throw new Error('Network response was not ok');
             }
 
@@ -26,7 +31,9 @@ const AddToDo = ({ taskListId, onAdd }) => {
             console.log('Task added:', newTask);
             onAdd(newTask);  // Call the onAdd function to update the state in ToDoApp
             setText(''); // Clear the input field
-        } catch (error) {
+        }
+		catch (error)
+		{
             console.error('Error adding task:', error);
         }
     };

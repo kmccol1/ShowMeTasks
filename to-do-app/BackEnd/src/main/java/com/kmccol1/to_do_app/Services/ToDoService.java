@@ -45,5 +45,13 @@ public class ToDoService
         return toDoRepository.findByTaskList(taskList);
     }
 
-    // Other methods...
+    /**
+     * Delete a task from a specific TaskList.
+     */
+    public void deleteTaskById(Integer taskId)
+    {
+        ToDoObj task = toDoRepository.findById(taskId)
+                .orElseThrow(() -> new RuntimeException("Task not found"));
+        toDoRepository.delete(task);
+    }
 }

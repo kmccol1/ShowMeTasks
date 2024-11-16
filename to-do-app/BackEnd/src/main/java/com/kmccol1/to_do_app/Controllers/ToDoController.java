@@ -93,4 +93,20 @@ public class ToDoController
 
         return ResponseEntity.ok(tasks);
     }
+
+    // Delete a task by its ID
+    @DeleteMapping("/{taskId}")
+    public ResponseEntity<Void> deleteTask(@PathVariable Integer taskId)
+    {
+        try
+        {
+            // Use IntermediaryService to delete the task
+            intermediaryService.deleteTaskById(taskId);
+            return ResponseEntity.noContent().build(); // Return 204 No Content
+        }
+        catch (RuntimeException e)
+        {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Return 404 if task not found
+        }
+    }
 }

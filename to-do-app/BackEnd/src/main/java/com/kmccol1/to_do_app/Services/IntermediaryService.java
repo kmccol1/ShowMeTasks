@@ -108,5 +108,9 @@ public class IntermediaryService
         return toDoService.getToDosByTaskList(taskList); // Assuming this is a method in ToDoService
     }
 
-    // You can add other utility methods as needed.
+    public void deleteTaskById(Integer taskId)
+    {
+        // Use the ToDoService to handle the deletion
+        toDoService.deleteTaskById(taskId);
+    }
 }

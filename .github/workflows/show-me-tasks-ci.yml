@@ -26,7 +26,7 @@ jobs:
 
       # Step 3: Set up Gradle
       - name: Set up Gradle
-        uses: gradle-actions/setup-gradle@v2
+        uses: gradle/gradle-build-action@v2
 
       # Step 4: Build the project
       - name: Build with Gradle

@@ -1,48 +1,44 @@
 import React, { useState } from 'react';
 import { TextField, Button } from '@mui/material';
 
-const CreateTaskList = ({ user }) => {
+const CreateTaskList = ({ user, onTaskListCreated }) => {
     const [taskListName, setTaskListName] = useState('');
 
     const handleSubmit = async (e) => {
-		e.preventDefault();
+        e.preventDefault();
 
-		const apiUrl = 'http://localhost:8080/api/todos/list/create';
+        const apiUrl = 'http://localhost:8080/api/todos/list/create';
 
-		console.log("Token: ", user ? user.token : 'No user found'); // For debugging purposes...
-		
-		if (!user || !user.token)
-		{
-			console.error("User or token is missing...");
-			return;
-		}
+        if (!user || !user.token) {
+            console.error("User or token is missing...");
+            return;
+        }
 
-		try
-		{
-			const response = await fetch(apiUrl, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					'Authorization': `Bearer ${user.token}`,
-				},
-				body: JSON.stringify({ username: user.username, name: taskListName }),
-			});
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`,
+                },
+                body: JSON.stringify({ username: user.username, name: taskListName }),
+            });
 
-			if (!response.ok)
-			{
-				throw new Error('Network response was not okay...');
-			}
+            if (!response.ok) {
+                throw new Error('Network response was not okay...');
+            }
 
-			// The response will now be simplified
-			const newTaskList = await response.json();
-			console.log('Task list created:', newTaskList);
-			setTaskListName(''); // Clear the input field
-		}
-		catch (error)
-		{
-			console.error('Error creating task list:', error);
-		}
-	};
+            const newTaskList = await response.json();
+            console.log('Task list created:', newTaskList);
+            setTaskListName(''); // Clear the input field
+
+            // Pass the new task list to parent component to update the task lists
+            onTaskListCreated(newTaskList);
+
+        } catch (error) {
+            console.error('Error creating task list:', error);
+        }
+    };
 
     return (
         <form onSubmit={handleSubmit}>

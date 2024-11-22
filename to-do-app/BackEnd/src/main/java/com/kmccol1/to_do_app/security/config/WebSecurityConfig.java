@@ -1,3 +1,12 @@
+//***************************************************************************************
+//
+//     Filename: WebSecurityConfig.java
+//     Author: Kyle McColgan
+//     Date: 21 November 2024
+//     Description: This file contains the Spring Security application configuration.
+//
+//***************************************************************************************
+
 package com.kmccol1.to_do_app.security.config;
 
 import com.kmccol1.to_do_app.Services.UserService;
@@ -19,8 +28,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
 import java.util.List;
+
+//***************************************************************************************
 
 @Configuration
 @EnableWebSecurity
@@ -84,3 +94,5 @@ public class WebSecurityConfig
         return authConfig.getAuthenticationManager();
     }
 }
+
+//***************************************************************************************

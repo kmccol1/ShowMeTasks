@@ -1,3 +1,12 @@
+//***************************************************************************************
+//
+//     Filename: TaskListService.java
+//     Author: Kyle McColgan
+//     Date: 21 November 2024
+//     Description: This file provides abstracted task list methods.
+//
+//***************************************************************************************
+
 package com.kmccol1.to_do_app.Services;
 
 import com.kmccol1.to_do_app.Data.TaskListRepository;
@@ -7,9 +16,10 @@ import com.kmccol1.to_do_app.Models.TaskList;
 import com.kmccol1.to_do_app.Models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
+
+//***************************************************************************************
 
 @Service
 public class TaskListService
@@ -53,22 +63,21 @@ public class TaskListService
     public List<TaskList> getTaskListsByUser(User user)
     {
         // Ensure the user exists
-        if (user == null)
+        if (user == null || user.getId() == null) // Add user ID check if needed
         {
             throw new UserNotFoundException("User not found.");
         }
 
         List<TaskList> taskLists = taskListRepository.findByUser(user);
 
-        // Return an empty list instead of throwing an exception
+        // If no task lists are found, return an empty list instead of throwing an exception
         if (taskLists.isEmpty())
         {
-            // Optionally log this scenario or handle differently
             return taskLists; // Return empty list
         }
 
         return taskLists;
     }
-
-    // Other task list-related methods...
 }
+
+//***************************************************************************************

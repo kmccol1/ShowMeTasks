@@ -1,9 +1,19 @@
+//***************************************************************************************
+//
+//     Filename: ToDoObj.java
+//     Author: Kyle McColgan
+//     Date: 21 November 2024
+//     Description: This file contains the ToDoObj (task) entity class.
+//
+//***************************************************************************************
+
 package com.kmccol1.to_do_app.Models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
+
+//***************************************************************************************
 
 @Entity
 public class ToDoObj
@@ -29,10 +39,9 @@ public class ToDoObj
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonBackReference(value = "user-tasks") // Prevents serialization of the user in ToDoObj JSON output...
     private User user;
 
-    // Default constructor
+    //Default constructor
     public ToDoObj()
     {
         this.taskList = new TaskList();
@@ -102,3 +111,5 @@ public class ToDoObj
         this.user = user;
     }
 }
+
+//***************************************************************************************

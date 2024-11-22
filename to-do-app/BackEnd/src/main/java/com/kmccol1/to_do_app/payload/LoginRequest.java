@@ -1,4 +1,15 @@
+//***************************************************************************************
+//
+//     Filename: LoginRequest.java
+//     Author: Kyle McColgan
+//     Date: 21 November 2024
+//     Description: This file formats all login requests for maintainability.
+//
+//***************************************************************************************
+
 package com.kmccol1.to_do_app.payload;
+
+//***************************************************************************************
 
 public class LoginRequest
 {
@@ -26,3 +37,5 @@ public class LoginRequest
         this.password = password;
     }
 }
+
+//***************************************************************************************

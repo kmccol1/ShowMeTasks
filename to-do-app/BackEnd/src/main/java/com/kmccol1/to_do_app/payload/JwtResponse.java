@@ -1,10 +1,21 @@
+//***************************************************************************************
+//
+//     Filename: JwtResponse.java
+//     Author: Kyle McColgan
+//     Date: 21 November 2024
+//     Description: This file provides authentication
+//                  and authorization response formatting.
+//
+//***************************************************************************************
+
 package com.kmccol1.to_do_app.payload;
 
 import org.springframework.security.core.GrantedAuthority;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+
+//***************************************************************************************
 
 public class JwtResponse
 {
@@ -15,7 +26,8 @@ public class JwtResponse
     private List<String> roles;  // List of roles as Strings...
 
     //Constructor...
-    public JwtResponse(String token, Integer id, String username, String email, Collection<? extends GrantedAuthority> authorities)
+    public JwtResponse(String token, Integer id, String username,
+                       String email, Collection<? extends GrantedAuthority> authorities)
     {
         this.token = token;
         this.id = id;
@@ -77,3 +89,5 @@ public class JwtResponse
         this.roles = roles;
     }
 }
+
+//***************************************************************************************

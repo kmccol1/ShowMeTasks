@@ -1,3 +1,12 @@
+//***************************************************************************************
+//
+//     Filename: JwtAuthenticationFilter.java
+//     Author: Kyle McColgan
+//     Date: 21 November 2024
+//     Description: This file provides the auth token validation implementation.
+//
+//***************************************************************************************
+
 package com.kmccol1.to_do_app.security;
 
 import com.kmccol1.to_do_app.Services.UserService;
@@ -10,8 +19,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 import java.io.IOException;
+
+//***************************************************************************************
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter
 {
@@ -60,3 +70,5 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter
         filterChain.doFilter(request, response);
     }
 }
+
+//***************************************************************************************

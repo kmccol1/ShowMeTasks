@@ -1,8 +1,18 @@
+//***************************************************************************************
+//
+//     Filename: ToDoRequest.java
+//     Author: Kyle McColgan
+//     Date: 21 November 2024
+//     Description: This file contains the structure of task objects.
+//
+//***************************************************************************************
+
 package com.kmccol1.to_do_app.payload;
+
+//***************************************************************************************
 
 public class ToDoRequest
 {
-
     private String title;
     private String description;
 
@@ -39,3 +49,5 @@ public class ToDoRequest
         this.description = description;
     }
 }
+
+//***************************************************************************************

@@ -1,8 +1,19 @@
+//***************************************************************************************
+//
+//     Filename: User.java
+//     Author: Kyle McColgan
+//     Date: 21 November 2024
+//     Description: This file contains and manages the registration info.
+//
+//***************************************************************************************
+
 package com.kmccol1.to_do_app.Models;
 
 import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+
+//***************************************************************************************
 
 @Entity
 @Table(name = "users")
@@ -91,4 +102,11 @@ public class User
     {
         this.roles = roles;
     }
+
+    public void setId(Integer id)
+    {
+        this.id = id;
+    }
 }
+
+//***************************************************************************************

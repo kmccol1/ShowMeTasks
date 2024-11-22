@@ -1,3 +1,12 @@
+//***************************************************************************************
+//
+//     Filename: UserService.java
+//     Author: Kyle McColgan
+//     Date: 21 November 2024
+//     Description: This file provides abstracted registration functionality.
+//
+//***************************************************************************************
+
 package com.kmccol1.to_do_app.Services;
 
 import com.kmccol1.to_do_app.Data.RoleRepository;
@@ -7,7 +16,6 @@ import com.kmccol1.to_do_app.Models.User;
 import com.kmccol1.to_do_app.payload.RegisterRequest;
 import com.kmccol1.to_do_app.security.UserDetailsImpl;
 import jakarta.annotation.PostConstruct;
-
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -15,10 +23,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+
+//***************************************************************************************
 
 @Service
 public class UserService implements UserDetailsService
@@ -94,3 +103,5 @@ public class UserService implements UserDetailsService
         }
     }
 }
+
+//***************************************************************************************

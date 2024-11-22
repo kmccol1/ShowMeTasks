@@ -1,3 +1,12 @@
+//***************************************************************************************
+//
+//     Filename: ToDoService.java
+//     Author: Kyle McColgan
+//     Date: 21 November 2024
+//     Description: This file provides abstracted task-level functionality.
+//
+//***************************************************************************************
+
 package com.kmccol1.to_do_app.Services;
 
 import com.kmccol1.to_do_app.Data.TaskListRepository;
@@ -7,9 +16,9 @@ import com.kmccol1.to_do_app.Models.ToDoObj;
 import com.kmccol1.to_do_app.Models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 import java.util.List;
+
+//***************************************************************************************
 
 @Service
 public class ToDoService
@@ -55,3 +64,5 @@ public class ToDoService
         toDoRepository.delete(task);
     }
 }
+
+//***************************************************************************************

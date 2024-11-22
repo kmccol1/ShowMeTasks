@@ -1,4 +1,15 @@
+//***************************************************************************************
+//
+//     Filename: RegisterRequest.java
+//     Author: Kyle McColgan
+//     Date: 21 November 2024
+//     Description: This file contains the format for registration requests.
+//
+//***************************************************************************************
+
 package com.kmccol1.to_do_app.payload;
+
+//***************************************************************************************
 
 public class RegisterRequest
 {
@@ -51,3 +62,5 @@ public class RegisterRequest
         this.password = password;
     }
 }
+
+//***************************************************************************************

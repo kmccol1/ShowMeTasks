@@ -1,3 +1,12 @@
+//***************************************************************************************
+//
+//   Filename: AuthenticationController.java
+//   Author: Kyle McColgan
+//   Date: 21 November 2024
+//   Description: This file provides register and login functionality.
+//
+//***************************************************************************************
+
 package com.kmccol1.to_do_app.Controllers;
 
 import com.kmccol1.to_do_app.payload.JwtResponse;
@@ -14,11 +23,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
 import com.kmccol1.to_do_app.payload.LoginRequest;
-
 import java.util.HashMap;
 import java.util.Map;
+
+//***************************************************************************************
 
 @RestController
 @RequestMapping("/api/auth")
@@ -71,7 +80,7 @@ public class AuthenticationController
         {
             e.printStackTrace(); // For debugging purposes
             Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("error", e.getMessage());
+            errorResponse.put("Registration error occurred: ", e.getMessage());
             return ResponseEntity.badRequest().body(errorResponse);
         }
     }
@@ -100,3 +109,5 @@ public class AuthenticationController
         return ResponseEntity.ok(jwtResponse);
     }
 }
+
+//***************************************************************************************

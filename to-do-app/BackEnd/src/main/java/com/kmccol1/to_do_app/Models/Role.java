@@ -1,8 +1,20 @@
+//***************************************************************************************
+//
+//     Filename: Role.java
+//     Author: Kyle McColgan
+//     Date: 21 November 2024
+//     Description: This is the Role entity class that
+//                  will get assigned automatically on registration.
+//
+//***************************************************************************************
+
 package com.kmccol1.to_do_app.Models;
 
 import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+
+//***************************************************************************************
 
 @Entity
 @Table(name = "roles")
@@ -67,3 +79,5 @@ public class Role
                 '}';
     }
 }
+
+//***************************************************************************************

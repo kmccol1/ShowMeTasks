@@ -1,3 +1,13 @@
+//***************************************************************************************
+//
+//     Filename: IntermediaryService.java
+//     Author: Kyle McColgan
+//     Date: 21 November 2024
+//     Description: This file serves as a proxy service between
+//                  the ToDoService and TaskListService service layer classes.
+//
+//***************************************************************************************
+
 package com.kmccol1.to_do_app.Services;
 
 import com.kmccol1.to_do_app.Models.TaskList;
@@ -9,9 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.List;
+
+//***************************************************************************************
 
 @Service
 public class IntermediaryService
@@ -113,4 +124,6 @@ public class IntermediaryService
         // Use the ToDoService to handle the deletion
         toDoService.deleteTaskById(taskId);
     }
+
+    //***************************************************************************************
 }

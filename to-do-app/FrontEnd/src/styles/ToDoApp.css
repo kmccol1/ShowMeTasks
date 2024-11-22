@@ -1,0 +1,47 @@
+/* General container styles */
+.container {
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Typography styles */
+h4 {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Card styles */
+.card {
+    margin: 20px;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+/* Welcome card styles */
+.welcome-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Button styles */
+.logout-btn {
+    margin-bottom: 20px;
+}
+
+/* Task List Tab styles */
+.tab-box {
+    margin-top: 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+.tab-label {
+    font-size: 1.1rem;
+}
+
+/* Task creation styles */
+.task-create {
+    margin: 20px 0;
+}

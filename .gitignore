@@ -1,11 +1,19 @@
 # Compiled class file
 *.class
 
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
 # Log file
 *.log
 
 # BlueJ files
 *.ctxt
+
+#IntelliJ files...
+.idea/
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/

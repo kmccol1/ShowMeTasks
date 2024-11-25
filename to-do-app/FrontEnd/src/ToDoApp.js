@@ -40,6 +40,13 @@ const ToDoApp = () => {
         localStorage.removeItem('username');
         setIsLoggedIn(false);
     };
+	
+	const getGreeting = () => {
+		const hour = new Date().getHours();
+		if (hour < 12) return "Good morning!";
+		else if (hour < 18) return "Good afternoon!";
+		else return "Good evening!";
+	};
 
     return (
         <Container className="container" maxWidth="md">
@@ -48,9 +55,9 @@ const ToDoApp = () => {
             </Typography>
             {!isLoggedIn ? (
                 <Card className="card welcome-card" variant="outlined">
-                    <Typography variant="h6" align="center" gutterBottom>
-                        Welcome! Register or Login to get started.
-                    </Typography>
+                   <Typography variant="h6" align="center" gutterBottom>
+						{getGreeting()} Start your productive journey now.
+                   </Typography>
                     <Register onRegister={handleRegister} />
                     <Login onLogin={handleLogin} />
                 </Card>

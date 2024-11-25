@@ -1,3 +1,11 @@
+body {
+    background: linear-gradient(135deg, #FFDEE9 0%, #B5FFFC 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 /* General container styles */
 .container {
     margin: 0 auto;
@@ -13,10 +21,19 @@ h4 {
 
 /* Card styles */
 .card {
-    margin: 20px;
-    padding: 20px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    border: none;
+}
+
+.card {
+    animation: fadeIn 1s ease-in;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(-10px); }
+    100% { opacity: 1; transform: translateY(0); }
 }
 
 /* Welcome card styles */
@@ -27,8 +44,13 @@ h4 {
 }
 
 /* Button styles */
-.logout-btn {
-    margin-bottom: 20px;
+.logout-btn, .MuiButton-root {
+    background-color: #ff7b54;
+    transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover, .MuiButton-root:hover {
+    background-color: #ff9e7c;
 }
 
 /* Task List Tab styles */

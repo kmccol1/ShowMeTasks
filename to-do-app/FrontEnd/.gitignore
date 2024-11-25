@@ -8,6 +8,9 @@
 # testing
 /coverage
 
+#IntelliJ files...
+.idea/
+
 # production
 /build
 

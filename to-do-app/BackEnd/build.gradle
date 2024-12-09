@@ -11,7 +11,6 @@ java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(23)
 	}
-//	sourceCompatibility = '17'
 }
 
 repositories {
@@ -31,6 +30,8 @@ dependencies {
 	implementation 'org.mariadb.jdbc:mariadb-java-client:3.5.0'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+//	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.3'
+//	testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.9.3' // Add test dependencies
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 

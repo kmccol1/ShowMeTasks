@@ -2,10 +2,10 @@ name: Java CI
 
 on:
   push:
-    branches: 
+    branches:
       - main
   pull_request:
-    branches: 
+    branches:
       - main
 
 jobs:
@@ -24,21 +24,30 @@ jobs:
           java-version: '23'
           distribution: 'temurin'
 
-      # Step 3: Set up Gradle
+      # Step 3: Cache Gradle dependencies
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.gradle/caches, ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      # Step 4: Set up Gradle
       - name: Set up Gradle
         uses: gradle/gradle-build-action@v2
 
-      # Step 4: Grant execute permission for Gradle Wrapper
+      # Step 5: Grant execute permission for Gradle Wrapper
       - name: Grant execute permission for Gradle Wrapper
         working-directory: to-do-app/BackEnd
         run: chmod +x ./gradlew
 
-      # Step 5: Build the project
+      # Step 6: Build the project
       - name: Build with Gradle
         working-directory: to-do-app/BackEnd
-        run: ./gradlew build
+        run: ./gradlew build --no-daemon
 
-      # Step 6: Run tests
+      # Step 7: Run Tests
       - name: Run Tests
         working-directory: to-do-app/BackEnd
-        run: ./gradlew test
+        run: ./gradlew test --stacktrace --no-daemon

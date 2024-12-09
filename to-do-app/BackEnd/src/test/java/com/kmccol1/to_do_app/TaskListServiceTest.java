@@ -1,6 +1,6 @@
 //***************************************************************************************
 //
-//     Filename: TaskListServiceTests.java
+//     Filename: TaskListServiceTest.java
 //     Author: Kyle McColgan
 //     Date: 07 December 2024
 //     Description: This file provides a unit test suite for the task list functions.
@@ -31,7 +31,7 @@ import java.util.Optional;
 //***************************************************************************************
 
 @SpringBootTest
-public class TaskListServiceTests
+public class TaskListServiceTest
 {
 	@Mock
 	private TaskListRepository taskListRepository;  // Mocking the repository

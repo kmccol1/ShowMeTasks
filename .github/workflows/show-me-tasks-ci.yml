@@ -33,7 +33,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      # Step 4: Set up Gradle
+      # Step 4: Set up Gradle.
       - name: Set up Gradle
         uses: gradle/gradle-build-action@v2
 
@@ -42,12 +42,12 @@ jobs:
         working-directory: to-do-app/BackEnd
         run: chmod +x ./gradlew
 
-      # Step 6: Build the project
+      # Step 6: Build the project.
       - name: Build with Gradle
         working-directory: to-do-app/BackEnd
         run: ./gradlew build --no-daemon
 
-      # Step 7: Run Tests
+      # Step 7: Run Tests with the new "test" profile.
       - name: Run Tests
         working-directory: to-do-app/BackEnd
-        run: ./gradlew test --stacktrace --no-daemon
+        run: ./gradlew test --no-daemon -Dspring.profiles.active=test

@@ -21,6 +21,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,6 +32,7 @@ import java.util.Optional;
 //***************************************************************************************
 
 @SpringBootTest
+@ActiveProfiles("test")
 public class TaskListServiceTest
 {
 	@Mock

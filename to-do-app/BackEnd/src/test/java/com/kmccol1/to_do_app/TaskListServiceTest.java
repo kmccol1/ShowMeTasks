@@ -34,7 +34,7 @@ import java.util.Optional;
 //***************************************************************************************
 
 //@SpringBootTest
-@ExtendWith(MockitoExtension.class)
+//@ExtendWith(MockitoExtension.class)
 @ActiveProfiles("test")
 public class TaskListServiceTest
 {

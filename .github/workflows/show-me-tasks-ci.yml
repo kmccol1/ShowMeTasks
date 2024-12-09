@@ -11,6 +11,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+        DB_URL: "jdbc:h2:mem:testdb"
+        DB_USERNAME: "sa"
+        DB_PASSWORD: "password"
 
     steps:
       # Step 1: Checkout the repository
@@ -50,4 +54,4 @@ jobs:
       # Step 7: Run Tests with the new "test" profile.
       - name: Run Tests
         working-directory: to-do-app/BackEnd
-        run: ./gradlew test --no-daemon -Dspring.profiles.active=test
+        run: ./gradlew clean test --no-daemon

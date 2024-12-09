@@ -2,14 +2,15 @@
 //
 //     Filename: IntermediaryService.java
 //     Author: Kyle McColgan
-//     Date: 21 November 2024
-//     Description: This file serves as a proxy service between
-//                  the ToDoService and TaskListService service layer classes.
+//     Date: 07 December 2024
+//     Description: This class is an in between service layer used by
+//                  the ToDoService and TaskListService service classes.
 //
 //***************************************************************************************
 
 package com.kmccol1.to_do_app.Services;
 
+import com.kmccol1.to_do_app.Exceptions.TaskListNotFoundException;
 import com.kmccol1.to_do_app.Models.TaskList;
 import com.kmccol1.to_do_app.Models.ToDoObj;
 import com.kmccol1.to_do_app.Models.User;
@@ -125,5 +126,152 @@ public class IntermediaryService
         toDoService.deleteTaskById(taskId);
     }
 
-    //***************************************************************************************
+
+    public TaskList updateTaskList(Integer id, TaskList updatedTaskList, User user)
+    {
+        // Ensure the task list is not null
+        if (updatedTaskList == null)
+        {
+            throw new IllegalArgumentException("Task list cannot be null.");
+        }
+
+        // Check if the user is null or invalid
+        if (user == null)
+        {
+            throw new IllegalArgumentException("User cannot be null.");
+        }
+        if (user.getId() == null || user.getId() <= 0) {
+            throw new IllegalArgumentException("User is invalid.");
+        }
+
+        // Find the existing task list
+        TaskList existingTaskList = taskListService.getTaskListById(id);
+
+        // Handle case where task list is not found
+        if (existingTaskList == null)
+        {
+            throw new TaskListNotFoundException("Task list with ID " + id + " not found.");
+        }
+
+        // Verify ownership first, before checking for name validity
+        if (!existingTaskList.getUser().getId().equals(user.getId()))
+        {
+            throw new RuntimeException("You do not have permission to update this task list.");
+        }
+
+        // Check if the task list is soft-deleted
+        if (existingTaskList.isDeleted())
+        {
+            throw new IllegalArgumentException("Task list has been deleted and cannot be updated.");
+        }
+
+        // Check for an empty task list name
+        if ( (updatedTaskList.getName() == null) || (updatedTaskList.getName().trim().isEmpty()) )
+        {
+            throw new IllegalArgumentException("Task list name cannot be empty.");
+        }
+
+        // Check if task list name is too long
+        if (updatedTaskList.getName().length() > 255)
+        {
+            throw new IllegalArgumentException("Task list name is too long.");
+        }
+
+        // Update fields
+        if ( ((updatedTaskList.getName()) != null) && (!(updatedTaskList.getName().isEmpty())))
+        {
+            existingTaskList.setName(updatedTaskList.getName());
+        }
+
+        // Save the updated task list
+        return taskListService.saveTaskList(existingTaskList);
+    }
+
+//    public TaskList updateTaskList(Integer id, TaskList updatedTaskList, User user) {
+//        // Ensure the task list is not null
+//        if (updatedTaskList == null) {
+//            throw new IllegalArgumentException("Task list cannot be null.");
+//        }
+//
+//        // Check if the user is null or invalid
+//        if (user == null || user.getId() == null || user.getId() <= 0) {
+//            throw new IllegalArgumentException("User is invalid.");
+//        }
+//
+//        // Find the existing task list
+//        TaskList existingTaskList = taskListService.getTaskListById(id);
+//
+//        // Handle case where task list is not found
+//        if (existingTaskList == null) {
+//            throw new TaskListNotFoundException("Task list with ID " + id + " not found.");
+//        }
+//
+//        // Verify ownership first, before checking for name validity
+//        if (!existingTaskList.getUser().getId().equals(user.getId())) {
+//            throw new RuntimeException("You do not have permission to update this task list.");
+//        }
+//
+//        // Check if the task list is soft-deleted
+//        if (existingTaskList.isDeleted()) {
+//            throw new IllegalArgumentException("Task list has been deleted and cannot be updated.");
+//        }
+//
+//        // Check for an empty task list name
+//        if (updatedTaskList.getName() == null || updatedTaskList.getName().trim().isEmpty()) {
+//            throw new IllegalArgumentException("Task list name cannot be empty.");
+//        }
+//
+//        // Check if task list name is too long
+//        if (updatedTaskList.getName().length() > 255) {
+//            throw new IllegalArgumentException("Task list name is too long.");
+//        }
+//
+//        // Update fields
+//        if (updatedTaskList.getName() != null && !updatedTaskList.getName().isEmpty()) {
+//            existingTaskList.setName(updatedTaskList.getName());
+//        }
+//
+//        // Save the updated task list
+//        return taskListService.saveTaskList(existingTaskList);
+//    }
+
+    public TaskList getDefaultTaskListForCurrentUser()
+    {
+        // Retrieve the current authenticated user
+        User currentUser = userService.getCurrentAuthenticatedUser();
+
+        // Check if the user already has a default task list
+        TaskList defaultTaskList = taskListService.findDefaultTaskListForUser(currentUser);
+
+        // If no default task list exists, create one
+        if (defaultTaskList == null) {
+            defaultTaskList = taskListService.createDefaultTaskListForUser(currentUser);
+        }
+
+        return defaultTaskList;
+    }
+
+    public TaskList getOrCreateDefaultTaskListForUser(User user)
+    {
+        // Check if the user already has a default task list
+        TaskList defaultTaskList = taskListService.findDefaultTaskListForUser(user);
+
+        if (defaultTaskList == null)
+        {
+            // Create a new default task list
+            defaultTaskList = new TaskList();
+            defaultTaskList.setName("Default Task List");
+            defaultTaskList.setUser(user);
+            defaultTaskList.setDefault(true);
+
+            // Save the new task list to the database
+            defaultTaskList = taskListService.saveTaskList(defaultTaskList);
+        }
+
+        return defaultTaskList;
+    }
+
 }
+
+//***************************************************************************************
+

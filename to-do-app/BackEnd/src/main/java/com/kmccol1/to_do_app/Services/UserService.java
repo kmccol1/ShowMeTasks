@@ -19,6 +19,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -101,6 +102,13 @@ public class UserService implements UserDetailsService
             roleRepository.save(roleUser);
             roleRepository.save(roleAdmin);
         }
+    }
+
+    public User getCurrentAuthenticatedUser()
+    {
+        String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findByUsername(currentUsername)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + currentUsername));
     }
 }
 

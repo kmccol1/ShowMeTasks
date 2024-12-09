@@ -2,14 +2,14 @@
 //
 //     Filename: Role.java
 //     Author: Kyle McColgan
-//     Date: 21 November 2024
-//     Description: This is the Role entity class that
-//                  will get assigned automatically on registration.
+//     Date: 08 December 2024
+//     Description: This is the Role entity class.
 //
 //***************************************************************************************
 
 package com.kmccol1.to_do_app.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -29,6 +29,7 @@ public class Role
     private String name;  // Example values: "ROLE_USER", "ROLE_ADMIN"
 
     @ManyToMany(mappedBy = "roles")
+    @JsonIgnore  // Prevent serialization of this field
     private Set<User> users = new HashSet<>();
 
     // Constructors

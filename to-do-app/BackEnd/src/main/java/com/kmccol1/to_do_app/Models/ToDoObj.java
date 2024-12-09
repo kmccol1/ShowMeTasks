@@ -2,7 +2,7 @@
 //
 //     Filename: ToDoObj.java
 //     Author: Kyle McColgan
-//     Date: 21 November 2024
+//     Date: 08 December 2024
 //     Description: This file contains the ToDoObj (task) entity class.
 //
 //***************************************************************************************
@@ -10,11 +10,13 @@
 package com.kmccol1.to_do_app.Models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 //***************************************************************************************
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 public class ToDoObj
 {

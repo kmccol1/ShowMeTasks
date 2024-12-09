@@ -14,8 +14,8 @@ Ensure you have the following installed on your system:
 ### Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/ShowMeTasks-frontend.git
-   cd ShowMeTasks-frontend
+   git clone https://github.com/your-username/ShowMeTasks.git
+   cd \to-do-app\FrontEnd
    ```
 2. Install dependencies:
    ```bash

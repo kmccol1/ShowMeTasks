@@ -2,7 +2,7 @@
 //
 //     Filename: TaskList.java
 //     Author: Kyle McColgan
-//     Date: 21 November 2024
+//     Date: 08 December 2024
 //     Description: This file contains the TaskList
 //                  entity, which contains a list of ToDoObjs
 //
@@ -11,13 +11,16 @@
 package com.kmccol1.to_do_app.Models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 //***************************************************************************************
 
+@JsonIgnoreProperties({"tasks"}) // Ignore the "tasks" field in the serialized JSON
 @Entity
 @Table(name = "task_lists")
 public class TaskList
@@ -39,6 +42,13 @@ public class TaskList
     @OneToMany(mappedBy = "taskList", cascade = CascadeType.ALL)
     private List<ToDoObj> tasks = new ArrayList<>();
 
+    // Add a 'deleted' field to track deletion status
+    @Column(name = "deleted", nullable = false)
+    private boolean deleted = false; // Default value is false, meaning not deleted
+
+    @Column(nullable = false)
+    private boolean isDefault = false; // Mark if it's the default list for the user
+
     // Default constructor
     public TaskList()
     {
@@ -51,7 +61,7 @@ public class TaskList
         this.user = user;
     }
 
-    //Setters and getters...
+    // Setters and getters...
     public Integer getId()
     {
         return id;
@@ -96,6 +106,42 @@ public class TaskList
     public void setId(Integer id)
     {
         this.id = id;
+    }
+
+    // Setter for 'deleted' field
+    public void setDeleted(boolean deleted)
+    {
+        this.deleted = deleted;
+    }
+
+    // Getter for 'deleted' field
+    public boolean isDeleted()
+    {
+        return deleted;
+    }
+
+    public boolean isDefault()
+    {
+        return isDefault;
+    }
+
+    public void setDefault(boolean aDefault)
+    {
+        isDefault = aDefault;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (o == null || getClass() != o.getClass()) return false;
+        TaskList taskList = (TaskList) o;
+        return Objects.equals(id, taskList.id);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hashCode(id);
     }
 }
 

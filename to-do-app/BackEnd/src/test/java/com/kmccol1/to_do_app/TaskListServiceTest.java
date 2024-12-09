@@ -17,9 +17,11 @@ import com.kmccol1.to_do_app.Models.User;
 import com.kmccol1.to_do_app.Services.TaskListService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -31,7 +33,8 @@ import java.util.Optional;
 
 //***************************************************************************************
 
-@SpringBootTest
+//@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 @ActiveProfiles("test")
 public class TaskListServiceTest
 {
@@ -144,7 +147,7 @@ public class TaskListServiceTest
 		nonExistentUser.setId(null); // Ensure the user has no ID (simulating a non-existent user)
 
 		// Mock the repository to return an empty list, simulating no task lists for this user
-		when(taskListRepository.findByUser(nonExistentUser)).thenReturn(new ArrayList<>());
+		//when(taskListRepository.findByUser(nonExistentUser)).thenReturn(new ArrayList<>());
 
 		// Act & Assert
 		UserNotFoundException exception = assertThrows(UserNotFoundException.class, () -> {
@@ -211,16 +214,18 @@ public class TaskListServiceTest
 	{
 		// Arrange
 		testTaskList.setName("Updated Task List");
-		when(taskListRepository.findById(1)).thenReturn(Optional.of(testTaskList));
+
+		// Mock repository behavior
+		//when(taskListRepository.findById(1)).thenReturn(Optional.of(testTaskList));
 		when(taskListRepository.save(any(TaskList.class))).thenReturn(testTaskList);
 
 		// Act
 		TaskList updatedTaskList = taskListService.saveTaskList(testTaskList);
 
 		// Assert
-		assertNotNull(updatedTaskList);
-		assertEquals("Updated Task List", updatedTaskList.getName());
-		verify(taskListRepository, times(1)).save(testTaskList);
+		assertNotNull(updatedTaskList);  // Check if the returned TaskList is not null
+		assertEquals("Updated Task List", updatedTaskList.getName());  // Check if the name is updated
+		verify(taskListRepository, times(1)).save(testTaskList);  // Verify that save() is called once
 	}
 
 	//Test #11

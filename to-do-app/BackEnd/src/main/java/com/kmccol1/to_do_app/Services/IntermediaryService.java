@@ -2,9 +2,9 @@
 //
 //     Filename: IntermediaryService.java
 //     Author: Kyle McColgan
-//     Date: 07 December 2024
-//     Description: This class is an in between service layer used by
-//                  the ToDoService and TaskListService service classes.
+//     Date: 12 December 2024
+//     Description: This class acts as a bridge for the two other classes,
+//                  the ToDoService.java and TaskListService.java classes.
 //
 //***************************************************************************************
 
@@ -15,6 +15,7 @@ import com.kmccol1.to_do_app.Models.TaskList;
 import com.kmccol1.to_do_app.Models.ToDoObj;
 import com.kmccol1.to_do_app.Models.User;
 import com.kmccol1.to_do_app.payload.RegisterRequest;
+import com.kmccol1.to_do_app.payload.TaskListDTO;
 import com.kmccol1.to_do_app.payload.ToDoRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -88,9 +89,10 @@ public class IntermediaryService
     /**
      * Get all task lists for a user
      */
-    public List<TaskList> getTaskListsByUser(User user)
+    public List<TaskListDTO> getTaskListsByUser(User user)
     {
-        return taskListService.getTaskListsByUser(user); // Assuming this is a method in TaskListService
+        // Use the updated service method that returns TaskListDTOs
+        return taskListService.getTaskListsByUser(user);
     }
 
     /**
@@ -126,7 +128,6 @@ public class IntermediaryService
         toDoService.deleteTaskById(taskId);
     }
 
-
     public TaskList updateTaskList(Integer id, TaskList updatedTaskList, User user)
     {
         // Ensure the task list is not null
@@ -135,12 +136,19 @@ public class IntermediaryService
             throw new IllegalArgumentException("Task list cannot be null.");
         }
 
+        // Check if the name is null or too long
+        if ( ((updatedTaskList.getName()) == null) || ((updatedTaskList.getName().length()) > 255))
+        {
+            throw new IllegalArgumentException("Error: Task list name is too long.");
+        }
+
         // Check if the user is null or invalid
         if (user == null)
         {
             throw new IllegalArgumentException("User cannot be null.");
         }
-        if (user.getId() == null || user.getId() <= 0) {
+        if (user.getId() == null || user.getId() <= 0)
+        {
             throw new IllegalArgumentException("User is invalid.");
         }
 
@@ -169,12 +177,6 @@ public class IntermediaryService
         if ( (updatedTaskList.getName() == null) || (updatedTaskList.getName().trim().isEmpty()) )
         {
             throw new IllegalArgumentException("Task list name cannot be empty.");
-        }
-
-        // Check if task list name is too long
-        if (updatedTaskList.getName().length() > 255)
-        {
-            throw new IllegalArgumentException("Task list name is too long.");
         }
 
         // Update fields

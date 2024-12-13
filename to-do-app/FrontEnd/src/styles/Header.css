@@ -1,49 +1,64 @@
-/* Header.css */
-
-/* Styling the AppBar */
+/* AppBar Styling */
 .custom-app-bar {
     background-color: #1976d2;
     box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease;
-    height: 64px; /* Standard AppBar height */
+    height: 64px;
     padding: 0 20px;
+    position: relative; /* Ensure proper layering within the layout */
+    z-index: 1; /* Ensure the AppBar stays in its layer */
+    display: flex;
+    align-items: center;
 }
 
 /* Toolbar Styling */
 .custom-toolbar {
-    display: flex;
-    flex-direction: column; /* Stack items vertically */
-    align-items: flex-start; /* Align to top-left */
-    justify-content: flex-start; /* Push content to the top */
+    display: flex; /* Horizontal alignment of content */
+    align-items: center; /* Center content vertically */
+    justify-content: space-between; /* Push items to edges */
     height: 100%;
-    padding: 8px 0; /* Adjust padding for better alignment */
 }
 
 /* Title Styling */
 .custom-title {
     font-weight: bold;
-    font-size: 1.5rem;
-    letter-spacing: 1px;
+    font-size: 1.8rem; /* Slightly larger for emphasis */
+    color: white; /* Ensure contrast against the background */
+    letter-spacing: 1.2px;
     text-transform: uppercase;
-    line-height: 1;
-    margin: 0; /* Remove margin to align properly */
+    margin: 0; /* No additional spacing */
 }
 
 /* Logout Button Styling */
 .logout-button {
-    border: 2px solid #fff;
-    color: #fff;
-    background-color: transparent;
-    padding: 6px 12px;
-    font-weight: bold;
-    border-radius: 25px;
-    margin-top: 4px; /* Add spacing between title and button */
-    transition: all 0.3s ease;
-    cursor: pointer;
+    background-color: #ffeb3b !important; /* Bright yellow background */
+    color: #1976d2 !important; /* Blue text color for contrast */
+    border: 2px solid #ffeb3b !important; /* Matching border */
+    padding: 10px 20px; /* Comfortable padding */
+    font-size: 1rem; /* Balanced font size */
+    font-weight: bold; /* Strong emphasis */
+    border-radius: 25px; /* Smooth, modern edges */
+    margin-left: auto; /* Push button to the right */
+    cursor: pointer; /* Pointer cursor for interactivity */
+    z-index: 10; /* Ensure it appears above other elements */
+    position: relative; /* Positioning to avoid overlap issues */
+    transition: all 0.3s ease-in-out; /* Smooth hover effect */
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15); /* Subtle shadow */
 }
 
-.logout-button:hover {
-    background-color: #fff;
-    color: #1976d2;
-    transform: scale(1.05);
+/* Ensure Hover and Focus Effects Work */
+.logout-button:hover,
+.logout-button:focus {
+    background-color: #ffd600 !important; /* Brighter yellow on hover */
+    color: #1976d2 !important; /* Consistent text color */
+    border-color: #ffd600 !important; /* Match hover background */
+    transform: translateY(-2px) scale(1.05); /* Subtle lift effect */
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3); /* Enhanced shadow */
+}
+
+/* Active State */
+.logout-button:active {
+    background-color: #ffca28 !important; /* Slightly darker yellow */
+    color: #ffffff !important; /* White text for better contrast */
+    transform: translateY(1px); /* Pressed effect */
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2); /* Dimmed shadow */
 }

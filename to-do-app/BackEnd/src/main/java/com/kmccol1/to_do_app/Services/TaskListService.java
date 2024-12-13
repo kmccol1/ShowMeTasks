@@ -2,7 +2,7 @@
 //
 //     Filename: TaskListService.java
 //     Author: Kyle McColgan
-//     Date: 08 December 2024
+//     Date: 12 December 2024
 //     Description: This file provides task list-related service functionality.
 //
 //***************************************************************************************
@@ -14,10 +14,14 @@ import com.kmccol1.to_do_app.Exceptions.TaskListNotFoundException;
 import com.kmccol1.to_do_app.Exceptions.UserNotFoundException;
 import com.kmccol1.to_do_app.Models.TaskList;
 import com.kmccol1.to_do_app.Models.User;
+import com.kmccol1.to_do_app.payload.TaskListDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 //***************************************************************************************
 
@@ -85,10 +89,10 @@ public class TaskListService
     /**
      * Fetch all task lists for a user.
      */
-    public List<TaskList> getTaskListsByUser(User user)
+    public List<TaskListDTO> getTaskListsByUser(User user)
     {
         // Ensure the user exists
-        if (user == null || user.getId() == null) // Add user ID check if needed
+        if (user == null || user.getId() == null)
         {
             throw new UserNotFoundException("User not found.");
         }
@@ -98,10 +102,13 @@ public class TaskListService
         // If no task lists are found, return an empty list instead of throwing an exception
         if (taskLists.isEmpty())
         {
-            return taskLists; // Return empty list
+            return Collections.emptyList(); // Return empty list
         }
 
-        return taskLists;
+        // Map each TaskList entity to a TaskListDTO including tasks
+        return taskLists.stream()
+                .map(taskList -> new TaskListDTO(taskList, taskList.getTasks()))
+                .collect(Collectors.toList());
     }
 
     public TaskList saveTaskList(TaskList taskList)

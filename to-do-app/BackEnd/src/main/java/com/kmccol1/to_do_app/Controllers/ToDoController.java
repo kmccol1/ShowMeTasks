@@ -2,7 +2,7 @@
 //
 //   Filename: ToDoController.java
 //   Author: Kyle McColgan
-//   Date: 08 December 2024
+//   Date: 12 December 2024
 //   Description: This file implements task list creation functionality.
 //
 //***************************************************************************************
@@ -15,6 +15,7 @@ import com.kmccol1.to_do_app.Models.User;
 import com.kmccol1.to_do_app.Services.IntermediaryService;
 import com.kmccol1.to_do_app.Services.UserService;
 import com.kmccol1.to_do_app.payload.TaskCreateRequest;
+import com.kmccol1.to_do_app.payload.TaskListDTO;
 import com.kmccol1.to_do_app.payload.TaskListResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -85,20 +86,25 @@ public class ToDoController
 
     // Get all task lists for a specific user
     @GetMapping("/list/{username}")
-    public ResponseEntity<List<TaskList>> getTaskListsByUser(@PathVariable String username)
+    public ResponseEntity<List<TaskListDTO>> getTaskListsByUser(@PathVariable String username)
     {
+        // Find user by username or throw an exception if not found
         User user = userService.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        List<TaskList> taskLists = intermediaryService.getTaskListsByUser(user);
+        // Fetch task lists as DTOs
+        List<TaskListDTO> taskLists = intermediaryService.getTaskListsByUser(user);
 
-        System.out.println("Returning task lists: " + taskLists); //For debugging purposes...
+        // Debugging: Print the task lists to the console
+        System.out.println("Returning task lists: " + taskLists);
 
+        // Return a 204 No Content response if the list is empty
         if (taskLists.isEmpty())
         {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(taskLists);
         }
 
+        // Otherwise, return the task lists with a 200 OK status
         return ResponseEntity.ok(taskLists);
     }
 

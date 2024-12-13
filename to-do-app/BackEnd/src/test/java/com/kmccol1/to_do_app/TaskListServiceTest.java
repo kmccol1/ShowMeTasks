@@ -2,8 +2,8 @@
 //
 //     Filename: TaskListServiceTest.java
 //     Author: Kyle McColgan
-//     Date: 07 December 2024
-//     Description: This file provides a unit test suite for the task list functions.
+//     Date: 12 December 2024
+//     Description: This file provides a unit test suite for various TaskList functions.
 //
 //***************************************************************************************
 
@@ -13,18 +13,16 @@ import com.kmccol1.to_do_app.Data.TaskListRepository;
 import com.kmccol1.to_do_app.Exceptions.TaskListNotFoundException;
 import com.kmccol1.to_do_app.Exceptions.UserNotFoundException;
 import com.kmccol1.to_do_app.Models.TaskList;
+import com.kmccol1.to_do_app.Models.ToDoObj;
 import com.kmccol1.to_do_app.Models.User;
 import com.kmccol1.to_do_app.Services.TaskListService;
+import com.kmccol1.to_do_app.payload.TaskListDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
@@ -111,16 +109,38 @@ public class TaskListServiceTest
 	public void testGetTaskListsByUser_found()
 	{
 		// Arrange
+		// Create a TaskList entity (not DTO yet).
+		TaskList taskList = new TaskList();
+		taskList.setId(1);
+		taskList.setName("Test Task List");
+		taskList.setDeleted(false);
+		taskList.setDefault(true);
+
+		List<ToDoObj> tasks = new ArrayList<>();
+		ToDoObj task = new ToDoObj();
+		task.setDescription("Test Task");
+		task.setCompleted(false);
+		tasks.add(task);
+
+		// Create TaskListDTO using the TaskList and tasks list.
+		TaskListDTO taskListDTO = new TaskListDTO(taskList, tasks);
+
+		// Mock the repository to return the TaskListDTO when findByUser is called.
 		List<TaskList> taskLists = new ArrayList<>();
-		taskLists.add(testTaskList);
+		taskLists.add(taskList);  // Add TaskList entity to mock repository response.
 		when(taskListRepository.findByUser(testUser)).thenReturn(taskLists);
 
 		// Act
-		List<TaskList> result = taskListService.getTaskListsByUser(testUser);
+		// Call the service method and get the result (which should return a list of TaskListDTO).
+		List<TaskListDTO> result = taskListService.getTaskListsByUser(testUser); // Expecting TaskListDTO
 
 		// Assert
+		// Verify the result size is 1 and that the name matches the one from TaskListDTO.
 		assertEquals(1, result.size());
 		assertEquals("Test Task List", result.get(0).getName());
+
+		// Verify that the result is properly mapped (DTO-to-entity conversion).
+		verify(taskListRepository).findByUser(testUser);
 	}
 
 	//Test #5
@@ -132,7 +152,7 @@ public class TaskListServiceTest
 		when(taskListRepository.findByUser(testUser)).thenReturn(taskLists);
 
 		// Act
-		List<TaskList> result = taskListService.getTaskListsByUser(testUser);
+		List<TaskListDTO> result = taskListService.getTaskListsByUser(testUser);
 
 		// Assert
 		assertTrue(result.isEmpty());
@@ -151,7 +171,7 @@ public class TaskListServiceTest
 
 		// Act & Assert
 		UserNotFoundException exception = assertThrows(UserNotFoundException.class, () -> {
-			taskListService.getTaskListsByUser(nonExistentUser);  // This should now throw exception if user is not found
+			taskListService.getTaskListsByUser(nonExistentUser);
 		});
 
 		assertEquals("User not found.", exception.getMessage());

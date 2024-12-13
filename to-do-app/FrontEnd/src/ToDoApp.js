@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+//import Header from './components/Header'; // Remove the Header import.
 import Register from './components/Register';
 import Login from './components/Login';
 import TaskListsContainer from './components/TaskListsContainer'; // Import new component
@@ -9,6 +10,12 @@ const ToDoApp = () => {
     const [user, setUser] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const [tasks, setTasks] = useState([]);
+	
+	//The below will need refactoring when implemening the Header task list counter message.
+	// Update taskLists when the TaskListsContainer component updates the task lists
+	//const updateTaskLists = (updatedTaskLists) => {
+	//	setTaskLists(updatedTaskLists);
+	//  };
 
     useEffect(() => {
 		const token = localStorage.getItem('authToken');
@@ -49,11 +56,13 @@ const ToDoApp = () => {
         }
     };
 
+    // Implement logout logic
     const handleLogout = () => {
         setUser(null);
         localStorage.removeItem('authToken');
         localStorage.removeItem('username');
         setIsLoggedIn(false);
+		console.log('User logged out');
     };
 	
 	const getGreeting = () => {
@@ -63,16 +72,19 @@ const ToDoApp = () => {
 		else return "Good evening!";
 	};
 	
-	// Calculate remaining tasks dynamically
+	// Re-calculate taskListCount dynamically, whenever tasks state changes.
     //const tasksRemaining = tasks.filter(task => !task.completed).length;
-    const tasksRemaining = Array.isArray(tasks) ? tasks.filter(task => !task.completed).length : 0;
+    //const taskListCount = taskLists.length;
 
     return (
         <Container className="container" maxWidth="md">
             {/* Main Heading */}
             <Typography variant="h4" gutterBottom>
-                {`You have ${tasksRemaining} task${tasksRemaining !== 1 ? 's' : ''} left to complete.`}
-			</Typography>
+				Welcome to ShowMeTasks - Create Task Lists!
+			  </Typography>
+			  <Typography variant="subtitle1" gutterBottom>
+				Organize your tasks effortlessly. Start by creating a task list and adding your first tasks.
+			  </Typography>
             
             {!isLoggedIn ? (
                 <Card className="card welcome-card" variant="outlined">
@@ -87,13 +99,6 @@ const ToDoApp = () => {
                 </Card>
             ) : (
                 <>
-                    {/* Logout Button */}
-                    <div style={{ marginBottom: "20px", display: "flex", justifyContent: "flex-end" }}>
-                        <Button className="logout-btn" variant="contained" onClick={handleLogout}>
-                            Logout
-                        </Button>
-                    </div>
-                    
                     {/* Task Lists Container */}
                     <TaskListsContainer onLogout={handleLogout} user={user} />
                 </>

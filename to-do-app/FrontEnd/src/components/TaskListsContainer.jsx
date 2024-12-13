@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Button, Box, Card, Typography, Grid, CircularProgress, TextField, AppBar, Toolbar } from '@mui/material';
-import Header from './Header'; // Importing the Header component
 import {Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import '../styles/TaskListsContainer.css';
 
 const TaskListsContainer = ({ onLogout, user }) => {
     const [taskLists, setTaskLists] = useState([]);
@@ -76,12 +76,14 @@ const TaskListsContainer = ({ onLogout, user }) => {
     }, [user.token]);
 
     const fetchTodos = useCallback(async (taskListId) => {
-		try {
+		try
+		{
 			const response = await fetch(`http://localhost:8080/api/todos/${taskListId}`, {
 				headers: { 'Authorization': `Bearer ${user.token}` },
 			});
 
-			if (response.status === 204) {
+			if (response.status === 204)
+			{
 				setTodos([]);  // Set an empty array if no tasks are found
 				return;
 			}
@@ -89,7 +91,9 @@ const TaskListsContainer = ({ onLogout, user }) => {
 			const data = await response.json();
 			setTodos(data || []);  // Safeguard for empty or undefined response
 
-		} catch (error) {
+		}
+		catch (error)
+		{
 			console.error('Error fetching todos:', error);
 		}
 	}, [user.token]);
@@ -104,44 +108,57 @@ const TaskListsContainer = ({ onLogout, user }) => {
     };
 
     const handleAddTask = async () => {
-	  if (newTask.trim() !== '') {
-		try {
-		  const response = await fetch(`http://localhost:8080/api/todos/create`, {
-			method: 'POST',
-			headers: {
-			  'Authorization': `Bearer ${user.token}`,
-			  'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-			  taskListId: selectedTaskListId,
-			  description: newTask,
-			}),
-		  });
+		if (newTask.trim() !== '')
+		{
+			try
+			{
+				// Step 1: Add the new task to the server
+				const response = await fetch(`http://localhost:8080/api/todos/create`, {
+					method: 'POST',
+					headers: {
+						'Authorization': `Bearer ${user.token}`,
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({
+						taskListId: selectedTaskListId,
+						description: newTask,
+					}),
+				});
 
-		  if (!response.ok) {
-			throw new Error('Failed to add task');
-		  }
+				if (!response.ok)
+				{
+					throw new Error('Failed to add task');
+				}
 
-		  const newTaskData = await response.json();
+				const newTaskData = await response.json();
 
-		  // Update the task list with the new task
-		  setTaskLists((prevLists) => {
-			return prevLists.map((list) => {
-			  if (list.id === selectedTaskListId) {
-				return {
-				  ...list,
-				  tasks: [...list.tasks, newTaskData], // Add the new task to the list
-				};
-			  }
-			  return list; // Do not modify other task lists
-			});
-		  });
+				// Step 2: Update the UI optimistically
+				setTaskLists((prevLists) =>
+					prevLists.map((list) =>
+						list.id === selectedTaskListId
+							? { ...list, tasks: [...(list.tasks || []), newTaskData] }
+							: list
+					)
+				);
+				//setTaskLists((prevLists) =>
+				//	prevLists.map((list) =>
+				//		list.id === selectedTaskListId ? { ...list, tasks: updatedTaskList.tasks } : list
+				//	)
+				//);
 
-		  setNewTask(''); // Clear input field after adding the task
-		} catch (error) {
-		  console.error('Error adding task:', error);
+				// Update the todos for the selected task list
+				if (selectedTaskListId)
+				{
+					setTodos((prevTodos) => [...(prevTodos || []), newTaskData]);
+				}
+
+				setNewTask(''); // Clear input field
+			}
+			catch (error)
+			{
+				console.error('Error adding or fetching tasks:', error);
+			}
 		}
-	  }
 	};
 	
     useEffect(() => {
@@ -154,7 +171,6 @@ const TaskListsContainer = ({ onLogout, user }) => {
 
     return (
         <Box sx={{ padding: 2 }}>
-            {/* Header with Logout */}
             {/* Main Content */}
             {loading ? (
                 <CircularProgress />
@@ -228,7 +244,7 @@ const TaskListsContainer = ({ onLogout, user }) => {
 							  {list.name}
 							</Typography>
 							<Typography variant="body2" sx={{ color: 'text.secondary' }}>
-							  {Array.isArray(list.tasks) ? list.tasks.length : 0} task{(Array.isArray(list.tasks) && list.tasks.length !== 1) ? 's' : ''}
+							  {list.tasks?.length || 0} task{list.tasks?.length !== 1 ? 's' : ''}
 							</Typography>
 						  </Card>
 						</Grid>
@@ -289,6 +305,8 @@ const TaskListsContainer = ({ onLogout, user }) => {
             )}
         </Box>
     );
+	
+				
 };
 
 export default TaskListsContainer;

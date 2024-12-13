@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { TextField, Button } from '@mui/material';
+import '../styles/Login.css'; // Import the custom CSS file
 
 const Login = ({ onLogin }) => {
     const [username, setUsername] = useState('');

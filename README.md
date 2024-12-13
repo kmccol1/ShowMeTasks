@@ -48,27 +48,112 @@ ShowMeTasks is a full-stack to-do list management application built with Java Sp
 
 ## Setup and Installation
 
-### 1. Clone the Repository:
+Follow these steps to set up and run the ShowMeTasks application locally.
+
+### 1. Prerequisites
+Ensure you have the following installed on your system:
+- **Java Development Kit (JDK)**: Version 11 or higher.
+- **MariaDB**: Installed and running.
+- **Node.js and npm**: Recommended version 14.x or higher for Node.js.
+- **Gradle**: Included with the project via the Gradle Wrapper.
+
+---
+
+### 2. Clone the Repository
+Start by cloning the repository and navigating to the project directory:
+
 ```bash
 git clone https://github.com/yourusername/ShowMeTasks.git
 cd ShowMeTasks
 ```
 
-### 2. Backend Setup:
-- Navigate to the `backend` folder.
-- Update the `application.properties` file with your MariaDB credentials and JWT secret.
-- Start the Spring Boot application:
-```bash
-./gradlew bootRun
-```
+---
 
-### 3. Frontend Setup:
-- Navigate to the `frontend` folder.
-- Install dependencies and start the React development server:
-```bash
-npm install
-npm start
-```
+### 3. Backend Setup (Spring Boot Application)
+1. **Navigate to the `backend` folder**:
+   ```bash
+   cd backend
+   ```
+
+2. **Update Database Configuration**:
+   - Locate the `application.properties` file under `src/main/resources/`.
+   - Update the following fields with your MariaDB credentials:
+     ```properties
+     spring.datasource.url=jdbc:mariadb://localhost:3306/your_database_name
+     spring.datasource.username=your_username
+     spring.datasource.password=your_password
+     ```
+   - Add a **JWT Secret Key** for authentication:
+     ```properties
+     jwt.secret=your_secret_key
+     ```
+
+3. **Start the Backend Server**:
+   - Use the Gradle Wrapper to start the Spring Boot application:
+     ```bash
+     ./gradlew bootRun
+     ```
+   - The server should start on `http://localhost:8080` by default.
+
+---
+
+### 4. Frontend Setup (React Application)
+1. **Navigate to the `frontend` folder**:
+   ```bash
+   cd ../frontend
+   ```
+
+2. **Install Dependencies**:
+   - Use npm to install the required dependencies:
+     ```bash
+     npm install
+     ```
+
+3. **Start the Development Server**:
+   - Start the React app:
+     ```bash
+     npm start
+     ```
+   - The frontend application will be accessible at `http://localhost:3000`.
+
+---
+
+### 5. Verify the Application
+1. Open your browser and visit the React frontend: `http://localhost:3000`.
+2. Test the backend by interacting with the app or directly accessing API endpoints at `http://localhost:8080`.
+
+---
+
+### 6. Optional: Build for Production
+If you want to build the app for production deployment:
+
+#### Backend:
+- Package the backend as a JAR file:
+  ```bash
+  ./gradlew build
+  ```
+- The JAR file will be located in `build/libs/`.
+
+#### Frontend:
+- Build the React app:
+  ```bash
+  npm run build
+  ```
+- The optimized static files will be located in the `build/` directory.
+
+---
+
+### Troubleshooting
+- **MariaDB connection issues**:
+  Ensure MariaDB is running, and the `application.properties` file has the correct credentials.
+- **Port conflicts**:
+  If the default ports (`8080` for the backend or `3000` for the frontend) are in use, update the configuration files:
+  - Backend: `application.properties` file (`server.port`).
+  - Frontend: Use the `PORT` environment variable when starting the React app:
+    ```bash
+    PORT=3001 npm start
+    
+
 
 ## Usage Guide
 

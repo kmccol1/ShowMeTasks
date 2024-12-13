@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { TextField, Button } from '@mui/material';
+import './styles/CreateTaskList.css'; // Import the CSS file
 
 const CreateTaskList = ({ user, onTaskListCreated }) => {
     const [taskListName, setTaskListName] = useState('');
@@ -41,16 +42,22 @@ const CreateTaskList = ({ user, onTaskListCreated }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form className="create-tasklist-form" onSubmit={handleSubmit}>
             <TextField
+                className="create-tasklist-input"
                 label="New Task List"
                 value={taskListName}
                 onChange={(e) => setTaskListName(e.target.value)}
                 variant="outlined"
                 fullWidth
-                margin="normal"
             />
-            <Button type="submit" variant="contained" color="primary" fullWidth>
+            <Button
+                className="create-tasklist-button"
+                type="submit"
+                variant="contained"
+                color="primary"
+                fullWidth
+            >
                 Create Task List
             </Button>
         </form>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { TextField, Button } from '@mui/material';
+import './styles/AddToDo.css'; // Import the CSS file
 
 const AddToDo = ({ taskListId, onAdd }) => {
     const [text, setText] = useState('');
@@ -7,14 +8,16 @@ const AddToDo = ({ taskListId, onAdd }) => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		if (!taskListId) {
+		if (!taskListId)
+		{
 			console.error('Task list ID is missing or invalid.');
 			return; // Avoid sending the request if taskListId is invalid.
 		}
 
 		const apiUrl = `http://localhost:8080/api/todos/create?taskListId=${taskListId}&description=${text}`;
 
-		try {
+		try
+		{
 			const token = localStorage.getItem('authToken');
 
 			const response = await fetch(apiUrl, {
@@ -37,26 +40,29 @@ const AddToDo = ({ taskListId, onAdd }) => {
 
 			onAdd(newTask); // Call the onAdd function to update the state in ToDoApp
 			setText(''); // Clear the input field
-		} catch (error) {
-			console.error('Error adding task:', error);
+		}
+		catch (error)
+		{
+			console.error('Error adding todo:', error);
 		}
 	};
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form className="add-todo-form" onSubmit={handleSubmit}>
             <TextField
+                className="add-todo-input"
                 label="New Task"
                 value={text}
                 onChange={(e) => setText(e.target.value)}
                 variant="outlined"
                 fullWidth
-                margin="normal"
             />
-            <Button type="submit" variant="contained" color="primary" fullWidth>
+            <Button className="add-todo-button" type="submit" variant="contained" color="primary" fullWidth>
                 Add Task
             </Button>
         </form>
     );
+
 };
 
 export default AddToDo;

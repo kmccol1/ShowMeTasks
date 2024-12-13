@@ -1,0 +1,77 @@
+/* TaskListsContainer.css */
+
+/* General Container */
+.container {
+  padding: 16px;
+}
+
+/* New Task List Button */
+.new-task-list-button {
+  font-size: 18px;
+  padding: 15px 25px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #6e7de3, #73c8e3);
+  transition: all 0.3s ease-in-out;
+}
+
+.new-task-list-button:hover {
+  transform: scale(1.05);
+  background: linear-gradient(135deg, #73c8e3, #6e7de3);
+}
+
+.new-task-list-button:active {
+  transform: scale(1);
+}
+
+/* Task List Card */
+.task-list-card {
+  padding: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.task-list-card.selected {
+  background-color: #e3f2fd;
+}
+
+.task-list-card:not(.selected) {
+  background-color: #ffffff;
+}
+
+/* Task List Header */
+.task-list-header {
+  font-weight: 600;
+}
+
+.task-list-subheader {
+  color: var(--text-secondary, rgba(0, 0, 0, 0.6));
+}
+
+/* Task Container */
+.task-container {
+  margin-top: 24px;
+  padding: 16px;
+  background-color: #fafafa;
+  border: 1px solid #ddd;
+}
+
+.empty-tasks-message {
+  color: var(--text-secondary, rgba(0, 0, 0, 0.6));
+}
+
+.task-card {
+  padding: 8px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+}
+
+.inline-task-creation {
+  display: flex;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.inline-task-input {
+  margin-right: 16px;
+  flex: 1;
+}

@@ -30,7 +30,7 @@ dependencies {
 	implementation 'org.mariadb.jdbc:mariadb-java-client:3.5.0'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
-	testImplementation 'com.h2database:h2'  // In-memory database for tests
+	testImplementation 'com.h2database:h2:2.1.214' // Update to match Spring Boot compatibility
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, Button } from '@mui/material';
+import { TextField, Button, Grid, Typography } from '@mui/material';
 import '../styles/Login.css'; // Import the custom CSS file
 
 const Login = ({ onLogin }) => {
@@ -53,27 +53,44 @@ const Login = ({ onLogin }) => {
 };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <TextField
-                label="Username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                variant="outlined"
-                fullWidth
-                margin="normal"
-            />
-            <TextField
-                label="Password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                variant="outlined"
-                fullWidth
-                margin="normal"
-            />
-            <Button type="submit" variant="contained" color="primary" fullWidth>
-                Login
-            </Button>
+        <form className="login-form" onSubmit={handleSubmit}>
+            <Typography variant="h5" gutterBottom>
+                Welcome Back!
+            </Typography>
+            <Grid container spacing={2}>
+                <Grid item xs={12}>
+                    <TextField
+                        className="login-input"
+                        label="Username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        variant="outlined"
+                        fullWidth
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField
+                        className="login-input"
+                        label="Password"
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        variant="outlined"
+                        fullWidth
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <Button
+                        className="login-button"
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        fullWidth
+                    >
+                        Login
+                    </Button>
+                </Grid>
+            </Grid>
         </form>
     );
 };

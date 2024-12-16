@@ -52,6 +52,6 @@ jobs:
         run: ./gradlew build --no-daemon
 
       # Step 7: Run Tests with the new "test" profile.
-      - name: Run Tests
+            - name: Run Tests
         working-directory: to-do-app/BackEnd
-        run: ./gradlew clean test --no-daemon
+        run: ./gradlew clean test --no-daemon -Dspring.profiles.active=test

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-//import Header from './components/Header'; // Remove the Header import.
+import Header from './components/Header'; // Remove the Header import.
 import Register from './components/Register';
 import Login from './components/Login';
 import TaskListsContainer from './components/TaskListsContainer'; // Import new component
@@ -77,34 +77,40 @@ const ToDoApp = () => {
     //const taskListCount = taskLists.length;
 
     return (
-        <Container className="container" maxWidth="md">
-            {/* Main Heading */}
-            <Typography variant="h4" gutterBottom>
-				Welcome to ShowMeTasks - Create Task Lists!
-			  </Typography>
-			  <Typography variant="subtitle1" gutterBottom>
-				Organize your tasks effortlessly. Start by creating a task list and adding your first tasks.
-			  </Typography>
-            
-            {!isLoggedIn ? (
-                <Card className="card welcome-card" variant="outlined">
-                    <Typography variant="h6" align="center" gutterBottom>
-                        {getGreeting()} Start your productive journey now.
-                    </Typography>
-                    <div style={{ display: "flex", flexDirection: "column", gap: "16px", marginTop: "20px" }}>
-                        {/* Register and Login Components */}
-                        <Register onRegister={handleRegister} />
-                        <Login onLogin={handleLogin} />
-                    </div>
-                </Card>
-            ) : (
-                <>
-                    {/* Task Lists Container */}
-                    <TaskListsContainer onLogout={handleLogout} user={user} />
-                </>
-            )}
-        </Container>
-    );
+		<>
+			{/* Add the Header component here */}
+			<Header isLoggedIn={isLoggedIn} onLogin={handleLogin} onLogout={handleLogout} user={user} />
+
+			{/* Main Container */}
+			<Container className="container" maxWidth="md">
+				{/* Main Heading */}
+				<Typography variant="h4" gutterBottom>
+					Welcome to ShowMeTasks - Create Task Lists!
+				</Typography>
+				<Typography variant="subtitle1" gutterBottom>
+					Organize your tasks effortlessly. Start by creating a task list and adding your first tasks.
+				</Typography>
+
+				{!isLoggedIn ? (
+					<Card className="card welcome-card" variant="outlined">
+						<Typography variant="h6" align="center" gutterBottom>
+							{getGreeting()} Start your productive journey now.
+						</Typography>
+						<div style={{ display: "flex", flexDirection: "column", gap: "16px", marginTop: "20px" }}>
+							{/* Register and Login Components */}
+							<Register onRegister={handleRegister} />
+							<Login onLogin={handleLogin} />
+						</div>
+					</Card>
+				) : (
+					<>
+						{/* Task Lists Container */}
+						<TaskListsContainer user={user} />
+					</>
+				)}
+			</Container>
+		</>
+	);
 };
 
 export default ToDoApp;

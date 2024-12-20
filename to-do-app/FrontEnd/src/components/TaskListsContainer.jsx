@@ -50,30 +50,37 @@ const TaskListsContainer = ({ onLogout, user }) => {
 		}
 	};
 
-    const fetchTaskLists = useCallback(async (username) => {
-        setLoading(true);
-        try
-		{
-            const response = await fetch(`http://localhost:8080/api/todos/list/${username}`, {
-                headers: { 'Authorization': `Bearer ${user.token}` },
-            });
-            const data = await response.json();
-            setTaskLists(data.length ? data : []);
+	const fetchTaskLists = useCallback(async (username) => {
+		setLoading(true);
+		try {
+			const response = await fetch(`http://localhost:8080/api/todos/list/${username}`, {
+				headers: { 'Authorization': `Bearer ${user.token}` },
+			});
+
+			if (response.status === 204) {
+				setTaskLists([]);
+				return;
+			}
+
+			if (!response.ok) {
+				throw new Error(`Error: ${response.status}`);
+			}
+
+			const data = await response.json();
 			setTaskLists(data.map((item) => ({
-			  ...item,
-			  tasks: Array.isArray(item.tasks) ? item.tasks : [], // Ensure tasks is an array
+				...item,
+				tasks: Array.isArray(item.tasks) ? item.tasks : [],
 			})));
-            if (data.length > 0) setSelectedTaskListId(data[0].id);
-        }
+			if (data.length > 0) setSelectedTaskListId(data[0].id);
+		}
 		catch (error)
 		{
-            console.error('Error fetching task lists:', error);
-        }
-		finally
-		{
-            setLoading(false);
-        }
-    }, [user.token]);
+			console.error('Error fetching task lists:', error);
+		}
+		finally {
+			setLoading(false);
+		}
+	}, [user.token]);
 
     const fetchTodos = useCallback(async (taskListId) => {
 		try
@@ -295,7 +302,7 @@ const TaskListsContainer = ({ onLogout, user }) => {
                                         onClick={handleAddTask}
                                         disabled={!newTask.trim()}
                                     >
-                                        Add Task
+                                        Add Task to list
                                     </Button>
                                 </Box>
                             </Card>

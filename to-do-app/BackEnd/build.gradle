@@ -30,44 +30,13 @@ dependencies {
 	implementation 'org.mariadb.jdbc:mariadb-java-client:3.5.0'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
-	testImplementation 'com.h2database:h2:2.1.214' // Update to match Spring Boot compatibility
+	testImplementation 'com.h2database:h2' // Update to match Spring Boot compatibility
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-//tasks.named('test') {
-//	useJUnitPlatform()
-//}
-
-//tasks.named('test') {
-//	useJUnitPlatform()
-//
-//	// Hardcode the Spring profile for testing
-//	systemProperty 'spring.profiles.active', 'test'
-//}
-
-//tasks.named('test') {
-//	useJUnitPlatform()
-//
-//	// Set the Spring profile for testing if not already defined
-//	doFirst {
-//		if (!System.getProperty('spring.profiles.active')) {
-//			systemProperty 'spring.profiles.active', 'test'
-//		}
-//	}
-//}
-//tasks.named('test') {
-//	useJUnitPlatform()
-//
-//	// Set the default Spring profile for tests unless overridden by CI
-//	doFirst {
-//		if (!project.hasProperty('spring.profiles.active')) {
-//			systemProperty 'spring.profiles.active', 'test'
-//		}
-//	}
-//}
-
 // Ensure the Spring profile is set without hardcoding in the test task.
-if (!project.hasProperty('spring.profiles.active')) {
+if (!project.hasProperty('spring.profiles.active'))
+{
 	// Setting default profile to 'test' if not provided
 	project.ext.set('spring.profiles.active', 'test')
 }

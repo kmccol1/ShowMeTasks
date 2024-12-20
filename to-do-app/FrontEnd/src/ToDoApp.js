@@ -18,7 +18,7 @@ const ToDoApp = () => {
 	//  };
 
     useEffect(() => {
-		const token = localStorage.getItem('authToken');
+		const token = localStorage.getItem('token');
 		const username = localStorage.getItem('username');
 
 		if (token && username)
@@ -38,18 +38,29 @@ const ToDoApp = () => {
 		}
 	}, []);
 
-    const handleRegister = (newUser) => {
-        setUser(newUser);
-        localStorage.setItem('authToken', newUser.token);
-        localStorage.setItem('username', newUser.username);
-        setIsLoggedIn(true);
-    };
+	const handleRegister = (newUser) => {
+		// Check if the newUser object contains the token
+		if (newUser && newUser.token)
+		{
+			// Set user state and save token and username to localStorage
+			setUser(newUser);
+			localStorage.removeItem('token'); // Remove any previous tokens
+			localStorage.setItem('token', newUser.token); // Store the new token
+			localStorage.setItem('username', newUser.username); // Store the username
+			setIsLoggedIn(true);
+			console.log('Registration successful, token received:', newUser.token);
+		}
+		else
+		{
+			console.error('No token received in response');
+		}
+	};
 
     const handleLogin = async (loggedInUser) => {
         
 		if (loggedInUser.token)
 		{
-            localStorage.setItem('authToken', loggedInUser.token);
+            localStorage.setItem('token', loggedInUser.token);
             localStorage.setItem('username', loggedInUser.username);
             setUser(loggedInUser);
             setIsLoggedIn(true);
@@ -59,7 +70,7 @@ const ToDoApp = () => {
     // Implement logout logic
     const handleLogout = () => {
         setUser(null);
-        localStorage.removeItem('authToken');
+        localStorage.removeItem('token');
         localStorage.removeItem('username');
         setIsLoggedIn(false);
 		console.log('User logged out');
@@ -88,7 +99,7 @@ const ToDoApp = () => {
 					Welcome to ShowMeTasks - Create Task Lists!
 				</Typography>
 				<Typography variant="subtitle1" gutterBottom>
-					Organize your tasks effortlessly. Start by creating a task list and adding your first tasks.
+					Create and organize task lists effectively. Start by creating a task list and adding your initial tasks.
 				</Typography>
 
 				{!isLoggedIn ? (

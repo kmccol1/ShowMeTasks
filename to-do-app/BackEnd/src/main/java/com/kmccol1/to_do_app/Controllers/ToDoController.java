@@ -2,7 +2,7 @@
 //
 //   Filename: ToDoController.java
 //   Author: Kyle McColgan
-//   Date: 12 December 2024
+//   Date: 19 December 2024
 //   Description: This file implements task list creation functionality.
 //
 //***************************************************************************************
@@ -26,6 +26,39 @@ import java.util.List;
 
 //***************************************************************************************
 
+/**
+ * REST controller for managing to-do tasks.
+ * <p>
+ * This controller provides endpoints for creating, retrieving, updating,
+ * and deleting to-do tasks. It is mapped to the "/api/todos" base path
+ * and supports cross-origin requests from the React frontend at
+ * "http://localhost:3000".
+ * </p>
+ * <p>
+ * Endpoints include:
+ * <ul>
+ *   <li>GET /api/todos - Retrieve a list of all tasks</li>
+ *   <li>POST /api/todos - Create a new task</li>
+ *   <li>PUT /api/todos/{id} - Update an existing task</li>
+ *   <li>DELETE /api/todos/{id} - Delete a task</li>
+ * </ul>
+ * </p>
+ *
+ * <p>
+ * Cross-Origin Resource Sharing (CORS) is configured to allow requests
+ * from the frontend running at <code>http://localhost:3000</code>.
+ * </p>
+ *
+ * <p>Annotations used:</p>
+ * <ul>
+ *   <li>{@code @RestController} - Marks this class as a RESTful controller.</li>
+ *   <li>{@code @RequestMapping("/api/todos")} - Maps the base path for the endpoints.</li>
+ *   <li>{@code @CrossOrigin} - Configures CORS to allow requests from the frontend.</li>
+ * </ul>
+ *
+ * @author Kyle McColgan
+ * @version 0.1.0
+ */
 @RestController
 @RequestMapping("/api/todos")
 @CrossOrigin(origins = "http://localhost:3000")
@@ -37,10 +70,47 @@ public class ToDoController
     @Autowired
     private UserService userService;
 
-    // Create a new task list for a user
+    /**
+     * Creates a new task list for a user.
+     * <p>
+     * This endpoint accepts a {@link TaskList} object in the request body, processes it,
+     * and creates a new task list associated with the user. The newly created task list
+     * is returned in the response along with an appropriate HTTP status code.
+     * </p>
+     *
+     * <p>Request:</p>
+     * <pre>
+     * POST /api/todos/list/create
+     * Content-Type: application/json
+     * {
+     *   "name": "My Task List",
+     *   "description": "This is a sample task list."
+     * }
+     * </pre>
+     *
+     * <p>Response:</p>
+     * <pre>
+     * HTTP/1.1 201 Created
+     * Content-Type: application/json
+     * {
+     *   "id": 1,
+     *   "name": "My Task List",
+     *   "description": "This is a sample task list.",
+     *   "tasks": []
+     * }
+     * </pre>
+     *
+     * @param taskList the {@link TaskList} object containing the details of the new task list
+     * @return a {@link ResponseEntity} containing the created task list wrapped in a
+     *         {@link TaskListResponse} object and the HTTP status code
+     * @throws IllegalArgumentException if the request body is invalid
+     * @see TaskList
+     * @see TaskListResponse
+     */
     @PostMapping("/list/create")
     public ResponseEntity<TaskListResponse> createTaskList(@RequestBody TaskList taskList)
     {
+        // Create a new task list for a user
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         System.out.println("Authenticated user: " + username);
 
@@ -61,10 +131,52 @@ public class ToDoController
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    // Create a new task within a specific task list
+    /**
+     * Creates a new task within a specific task list.
+     * <p>
+     * This endpoint accepts a {@link TaskCreateRequest} object in the request body,
+     * processes it, and creates a new task associated with the specified task list.
+     * The created task is returned in the response along with an appropriate HTTP
+     * status code.
+     * </p>
+     *
+     * <p>Request:</p>
+     * <pre>
+     * POST /api/todos/create
+     * Content-Type: application/json
+     * {
+     *   "taskListId": 1,
+     *   "taskName": "Buy Groceries",
+     *   "taskDescription": "Get milk, eggs, and bread.",
+     *   "dueDate": "2024-12-20T12:00:00"
+     * }
+     * </pre>
+     *
+     * <p>Response:</p>
+     * <pre>
+     * HTTP/1.1 201 Created
+     * Content-Type: application/json
+     * {
+     *   "id": 42,
+     *   "taskListId": 1,
+     *   "taskName": "Buy Groceries",
+     *   "taskDescription": "Get milk, eggs, and bread.",
+     *   "dueDate": "2024-12-20T12:00:00",
+     *   "status": "PENDING"
+     * }
+     * </pre>
+     *
+     * @param taskCreateRequest the {@link TaskCreateRequest} object containing the details of the task to be created
+     * @return a {@link ResponseEntity} containing the created task wrapped in a {@link ToDoObj} object and the HTTP status code
+     * @throws IllegalArgumentException if the request body is invalid or the task list ID does not exist
+     * @see TaskCreateRequest
+     * @see ToDoObj
+     */
     @PostMapping("/create")
     public ResponseEntity<ToDoObj> createTaskInList(@RequestBody TaskCreateRequest taskCreateRequest)
     {
+        // Create a new task within a specific task list
+
         Integer taskListId = taskCreateRequest.getTaskListId();
         String description = taskCreateRequest.getDescription();
 

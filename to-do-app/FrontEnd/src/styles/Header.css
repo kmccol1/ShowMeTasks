@@ -1,35 +1,34 @@
 /* AppBar Styling */
 .custom-app-bar {
-    background-color: #1976d2;
+    background-color: #1976d2; /* App bar remains blue */
     box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
     height: 64px;
     padding: 0 20px;
-    position: relative; /* Ensure proper layering within the layout */
-    z-index: 1; /* Ensure the AppBar stays in its layer */
-    display: flex;
-    align-items: center;
+    position: relative;
+    z-index: 1;
 }
 
 /* Toolbar Styling */
 .custom-toolbar {
-    display: flex; /* Horizontal alignment of content */
-    align-items: center; /* Center content vertically */
-    justify-content: space-between; /* Push items to edges */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     height: 100%;
 }
 
 /* Title Styling */
 .custom-title {
     font-weight: bold;
-    font-size: 1.8rem; /* Slightly larger for emphasis */
-    color: white; /* Ensure contrast against the background */
+    font-size: 1.8rem;
+    color: white;
     letter-spacing: 1.2px;
     text-transform: uppercase;
-    margin: 0; /* No additional spacing */
+    margin: 0;
 }
 
-/* Logout Button Styling */
-.logout-button {
+/* Button Styling */
+.logout-button,
+.register-button {
     background-color: #ffeb3b !important; /* Bright yellow background */
     color: #1976d2 !important; /* Blue text color for contrast */
     border: 2px solid #ffeb3b !important; /* Matching border */
@@ -45,20 +44,63 @@
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15); /* Subtle shadow */
 }
 
-/* Ensure Hover and Focus Effects Work */
-.logout-button:hover,
-.logout-button:focus {
-    background-color: #ffd600 !important; /* Brighter yellow on hover */
-    color: #1976d2 !important; /* Consistent text color */
-    border-color: #ffd600 !important; /* Match hover background */
-    transform: translateY(-2px) scale(1.05); /* Subtle lift effect */
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3); /* Enhanced shadow */
+/* Register Button Styling (default) */
+.register-button {
+    background-color: white;         /* Light background for high contrast */
+    color: #1976d2;                  /* Dark blue text to contrast with white */
+    border: 2px solid #1976d2;       /* Border in dark blue to match text */
 }
 
-/* Active State */
+/* Register Button Hover and Focus Styling */
+.register-button:hover,
+.register-button:focus {
+    background-color: #f57c00;       /* Dark orange on hover */
+    border-color: #f57c00;
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Register Button Active State */
+.register-button:active {
+    background-color: #e65100;       /* Darker orange when pressed */
+    color: white;
+    transform: translateY(1px);
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Logout Button Styling (when logged in) */
+.logout-button {
+    background-color: #ffeb3b;
+    color: #1976d2;
+    border: 2px solid #ffeb3b;
+}
+
+/* Logout Button Hover and Focus Styling */
+.logout-button:hover,
+.logout-button:focus {
+    background-color: #ffd600;
+    border-color: #ffd600;
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Logout Button Active State */
 .logout-button:active {
-    background-color: #ffca28 !important; /* Slightly darker yellow */
-    color: #ffffff !important; /* White text for better contrast */
-    transform: translateY(1px); /* Pressed effect */
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2); /* Dimmed shadow */
+    background-color: #ffca28;
+    color: white;
+    transform: translateY(1px);
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .custom-title {
+        font-size: 1.4rem;
+    }
+
+    .logout-button,
+    .register-button {
+        font-size: 0.9rem;
+        padding: 8px 16px;
+    }
 }

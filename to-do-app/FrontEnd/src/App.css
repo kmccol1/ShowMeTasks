@@ -1,101 +1,74 @@
 /* General App Wrapper */
 .App {
-    text-align: center;
-    font-family: 'Roboto', sans-serif; /* Use a clean, modern font */
+    font-family: 'Roboto', sans-serif; /* Clean, modern font */
     color: #333; /* Neutral text color */
-    background-color: #f5f5f5; /* Light background for better contrast */
-    min-height: 100vh; /* Ensure the app takes the full viewport height */
+    background-color: #f9f9f9; /* Light, inviting background */
+    min-height: 100vh; /* Ensure full viewport height */
     margin: 0;
+    padding: 0;
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Consistent spacing between content */
+    align-items: center; /* Center content horizontally */
+    justify-content: flex-start; /* Stack content from the top */
 }
 
-/* App Logo */
-.App-logo {
-    height: 20vmin;
-    pointer-events: none;
-    margin: 20px auto; /* Center and add some breathing space */
-    animation: App-logo-spin infinite 10s linear; /* Adjust spin speed for subtlety */
-}
-
-/* Reduced Motion Handling */
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 15s linear; /* Slow down for better UX */
-    }
-}
-
-/* App Header */
-.App-header {
-    background-color: #1976d2; /* Use a primary theme color */
-    color: white;
-    padding: 40px 20px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    border-bottom: 4px solid #004ba0; /* Accent border for header */
+/* ToDoApp Wrapper */
+.ToDoApp {
+    width: 90%; /* Make it responsive */
+    max-width: 800px; /* Limit maximum width for readability */
+    margin: 20px auto; /* Center on the page */
+    background-color: white; /* Card-like appearance */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    border-radius: 8px; /* Smooth corners */
+    padding: 20px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    gap: 20px; /* Consistent spacing between elements */
 }
 
-/* Header Font */
-.App-header h1 {
-    font-size: 2.5rem;
+/* Shared Button Styling */
+button {
+    font-size: 1rem;
     font-weight: bold;
-    margin: 0;
-}
-
-.App-header p {
-    font-size: 1.2rem;
-    margin-top: 10px;
-    opacity: 0.8; /* Slight transparency for supporting text */
-}
-
-/* Links */
-.App-link {
-    color: #61dafb;
-    text-decoration: none;
-    font-weight: bold;
-    transition: color 0.3s ease;
-}
-
-.App-link:hover {
-    color: #004ba0;
-    text-decoration: underline;
-}
-
-/* Footer */
-.App-footer {
-    background-color: #282c34;
+    padding: 10px 15px;
     color: white;
-    padding: 20px 0;
-    font-size: 0.9rem;
-    text-align: center;
-    box-shadow: 0px -4px 10px rgba(0, 0, 0, 0.1);
+    background-color: #1976d2; /* Primary color */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-/* Keyframe Animations */
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+button:hover {
+    background-color: #004ba0; /* Darker blue on hover */
+    transform: scale(1.05); /* Slight pop effect */
 }
 
-/* Additional Responsiveness */
+button:active {
+    background-color: #002f6c; /* Even darker for pressed effect */
+    transform: scale(1); /* Remove pop effect */
+}
+
+button:disabled {
+    background-color: #ccc; /* Disabled state */
+    cursor: not-allowed;
+}
+
+/* Input Styling */
+input:focus, textarea:focus {
+    border-color: #1976d2; /* Highlight on focus */
+    outline: none; /* Remove default outline */
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
-    .App-header h1 {
-        font-size: 2rem;
+    .ToDoApp {
+        width: 95%; /* Slightly wider for smaller screens */
+        padding: 15px;
     }
 
-    .App-header p {
-        font-size: 1rem;
-    }
-
-    .App-logo {
-        height: 30vmin;
+    button {
+        font-size: 0.9rem;
+        padding: 8px 12px;
     }
 }

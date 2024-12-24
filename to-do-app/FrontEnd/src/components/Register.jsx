@@ -29,20 +29,20 @@ const Register = ({ onRegister }) => {
 			}
 			else
 			{
-				console.error("Token not received in response:", data);
+				console.error("Token not received in response during registration:", data);
 			}
 		})
 		.catch(error => {
-			console.error('Error during registration:', error);
+			console.error('Error occurred during registration:', error);
 		});
 	};
 
-    return (
+     return (
         <form className="register-form" onSubmit={handleSubmit}>
             <Typography variant="h5" gutterBottom>
                 Create an Account
             </Typography>
-            <Grid container spacing={2}>
+            <Grid container spacing={3}>
                 <Grid item xs={12}>
                     <TextField
                         className="register-input"

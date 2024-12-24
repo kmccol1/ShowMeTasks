@@ -5,37 +5,42 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: 'Roboto', sans-serif; /* Ensure consistent typography */
+    font-family: 'Roboto', sans-serif;
     margin: 0;
-    color: #333; /* Neutral text color */
+    color: #333;
 }
 
-/* General container styles */
+/* General Container Styles */
 .container {
     margin: 0 auto;
     padding: 20px;
-    max-width: 1200px; /* Maintain a readable content width */
+    max-width: 1200px;
 }
 
-/* Typography styles */
+/* Typography Styles */
 h4 {
     font-size: 2rem;
     font-weight: bold;
-    color: #444; /* Slightly darker for contrast */
+    color: #444;
     text-align: center;
     margin-bottom: 20px;
-    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Add subtle depth */
+    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Card styles */
+.subtitle1 {
+    text-align: center;
+    color: #555;
+    font-size: 1.1rem;
+    margin-bottom: 40px;
+}
+
+/* Card Styles */
 .card {
     background-color: #ffffff;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     border-radius: 16px;
-    border: none;
     padding: 20px;
-    animation: fadeIn 1s ease-in;
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Add interactivity */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card:hover {
@@ -43,7 +48,7 @@ h4 {
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 }
 
-/* Welcome card styles */
+/* Welcome Card Styles */
 .welcome-card {
     display: flex;
     flex-direction: column;
@@ -51,11 +56,19 @@ h4 {
     text-align: center;
 }
 
-/* Button styles */
+/* Auth Components Container */
+.auth-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 20px;
+}
+
+/* Button Styles */
 .logout-btn,
 .MuiButton-root {
     background-color: #ff7b54;
-    color: #ffffff; /* Ensure text visibility */
+    color: #ffffff;
     border-radius: 25px;
     font-weight: bold;
     padding: 10px 20px;
@@ -69,7 +82,7 @@ h4 {
     transform: scale(1.05);
 }
 
-/* Task List Tab styles */
+/* Task List Tab Styles */
 .tab-box {
     margin-top: 20px;
     padding: 10px;
@@ -86,12 +99,12 @@ h4 {
     letter-spacing: 0.5px;
 }
 
-/* Task creation styles */
+/* Task Creation Styles */
 .task-create {
     margin: 20px 0;
     display: flex;
     align-items: center;
-    gap: 10px; /* Uniform spacing between elements */
+    gap: 10px;
 }
 
 .task-create input {
@@ -127,12 +140,12 @@ h4 {
 
 /* Animations */
 @keyframes fadeIn {
-    0% { 
-        opacity: 0; 
-        transform: translateY(-10px); 
+    0% {
+        opacity: 0;
+        transform: translateY(-10px);
     }
-    100% { 
-        opacity: 1; 
-        transform: translateY(0); 
+    100% {
+        opacity: 1;
+        transform: translateY(0);
     }
 }

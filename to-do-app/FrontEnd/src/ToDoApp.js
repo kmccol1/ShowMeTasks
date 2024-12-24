@@ -78,9 +78,12 @@ const ToDoApp = () => {
 	
 	const getGreeting = () => {
 		const hour = new Date().getHours();
-		if (hour < 12) return "Good morning!";
-		else if (hour < 18) return "Good afternoon!";
-		else return "Good evening!";
+		const greetingTime = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
+
+		// Add a motivational message based on the time of day
+		const motivationalMessage = hour < 12 ? "Let's make today productive!" : hour < 18 ? "Keep going, you're doing great!" : "Wrap up your day with some tasks!";
+		
+		return `${greetingTime}! ${motivationalMessage}`;
 	};
 	
 	// Re-calculate taskListCount dynamically, whenever tasks state changes.
@@ -88,40 +91,40 @@ const ToDoApp = () => {
     //const taskListCount = taskLists.length;
 
     return (
-		<>
-			{/* Add the Header component here */}
-			<Header isLoggedIn={isLoggedIn} onLogin={handleLogin} onLogout={handleLogout} user={user} />
+        <>
+            {/* Main content */}
+            <Header isLoggedIn={isLoggedIn} onLogin={handleLogin} onLogout={handleLogout} user={user} />
 
-			{/* Main Container */}
-			<Container className="container" maxWidth="md">
-				{/* Main Heading */}
-				<Typography variant="h4" gutterBottom>
-					Welcome to ShowMeTasks - Create Task Lists!
-				</Typography>
-				<Typography variant="subtitle1" gutterBottom>
-					Create and organize task lists effectively. Start by creating a task list and adding your initial tasks.
-				</Typography>
+            {/* Main Container */}
+            <Container className="container" maxWidth="md">
+                {/* Main Heading */}
+                <Typography variant="h4" gutterBottom>
+                    Welcome to ShowMeTasks - Create Task Lists!
+                </Typography>
+                <Typography variant="subtitle1" gutterBottom>
+                    Create and organize task lists effectively. Start by creating a task list and adding your initial tasks.
+                </Typography>
 
-				{!isLoggedIn ? (
-					<Card className="card welcome-card" variant="outlined">
-						<Typography variant="h6" align="center" gutterBottom>
+                {!isLoggedIn ? (
+                    <Card className="card welcome-card" variant="outlined">
+                        <Typography variant="h6" align="center" gutterBottom>
 							{getGreeting()} Start your productive journey now.
 						</Typography>
-						<div style={{ display: "flex", flexDirection: "column", gap: "16px", marginTop: "20px" }}>
-							{/* Register and Login Components */}
-							<Register onRegister={handleRegister} />
-							<Login onLogin={handleLogin} />
-						</div>
-					</Card>
-				) : (
-					<>
-						{/* Task Lists Container */}
-						<TaskListsContainer user={user} />
-					</>
-				)}
-			</Container>
-		</>
-	);
+                        <div className="auth-container">
+                            {/* Register and Login Components */}
+                            <Register onRegister={handleRegister} />
+                            <Login onLogin={handleLogin} />
+                        </div>
+                    </Card>
+                ) : (
+                    <>
+                        {/* Task Lists Container */}
+                        <TaskListsContainer user={user} />
+                    </>
+                )}
+            </Container>
+        </>
+    );
 };
 
 export default ToDoApp;

@@ -1,34 +1,41 @@
 /* Create New Task List Button */
 .create-task-btn {
-    font-size: 18px;
-    padding: 15px 30px; /* Slightly wider for a premium feel */
-    border-radius: 25px; /* Smooth pill-shaped corners */
+    font-size: 22px; /* Slightly larger font for prominence */
+    padding: 18px 40px; /* More spacious padding */
+    border-radius: 30px; /* Larger pill shape for elegance */
     background: linear-gradient(135deg, #6e7de3, #73c8e3);
     color: white;
     border: none;
     cursor: pointer;
     transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
     text-transform: uppercase;
-    font-weight: 700; /* More emphasis */
-    letter-spacing: 1px; /* Subtle spacing for readability */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add depth */
+    font-weight: 700; /* Bold for emphasis */
+    letter-spacing: 1.5px; /* More spacing for a premium look */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Stronger shadow for depth */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Subtle text shadow for elegance */
+    max-width: 300px; /* Keep it constrained for responsiveness */
+    width: 100%; /* Ensure proper width on smaller screens */
 }
 
+/* Button Hover */
+.create-task-btn:hover {
+    transform: scale(1.1); /* Bigger scaling effect */
+    background: linear-gradient(135deg, #73c8e3, #6e7de3);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25); /* More pronounced hover shadow */
+}
+
+/* Button Active */
+.create-task-btn:active {
+    transform: scale(0.98); /* Slight inward press effect */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Reduced shadow for active state */
+}
+
+/* Container Styling */
 .new-task-list-btn-container {
     display: flex;
     justify-content: center;
-    margin-bottom: 20px;
-}
-
-.create-task-btn:hover {
-    transform: scale(1.08);
-    background: linear-gradient(135deg, #73c8e3, #6e7de3);
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Stronger shadow on hover */
-}
-
-.create-task-btn:active {
-    transform: scale(1);
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2); /* Slightly deeper shadow */
+    margin: 30px 0; /* Increased spacing around the button */
+    text-align: center;
 }
 
 /* Task List Grid */

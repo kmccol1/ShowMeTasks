@@ -16,20 +16,42 @@ const Header = ({ user, isLoggedIn, onLogout, onLogin }) => {
     };
 	
     return (
-        <AppBar position="static" className="custom-app-bar">
-            <Toolbar className="custom-toolbar">
-                <Typography variant="h6" className="custom-title">
-                    ShowMeTasks
-                </Typography>
-                <Button
-                    className={`logout-button ${isLoggedIn ? 'logout' : 'register'}`}
-                    onClick={handleButtonClick}
-                >
-                    {isLoggedIn ? 'Logout' : 'Register'}
-                </Button>
-            </Toolbar>
-        </AppBar>
-    );
+		<AppBar 
+			position="static" 
+			className="custom-app-bar" 
+			sx={{ boxShadow: 3, bgcolor: "primary.main" }}
+		>
+			<Toolbar 
+				className="custom-toolbar" 
+				sx={{ display: "flex", justifyContent: "space-between" }}
+			>
+				<Typography 
+					variant="h6" 
+					className="custom-title" 
+					component="h1"
+					sx={{ fontWeight: "bold", letterSpacing: 1.2 }}
+				>
+					ShowMeTasks
+				</Typography>
+				<Button
+					className="logout-button"
+					onClick={handleButtonClick}
+					sx={{
+						bgcolor: isLoggedIn ? "error.main" : "success.main",
+						color: "white",
+						textTransform: "uppercase",
+						fontWeight: "medium",
+						'&:hover': {
+							bgcolor: isLoggedIn ? "error.dark" : "success.dark",
+						}
+					}}
+					aria-label={isLoggedIn ? 'Logout' : 'Register'}
+				>
+					{isLoggedIn ? 'Logout' : 'Register'}
+				</Button>
+			</Toolbar>
+		</AppBar>
+	);
 };
 
 export default Header;

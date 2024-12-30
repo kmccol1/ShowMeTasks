@@ -19,6 +19,28 @@ const TaskListsContainer = ({ onLogout, user }) => {
     const handleClose = () => {
         setOpen(false);
     };
+	
+	const handleDeleteTask = async (taskId) => {
+		try
+		{
+			const response = await fetch(`http://localhost:8080/api/todos/${taskId}`, {
+				method: 'DELETE',
+			});
+
+			if (response.ok)
+			{
+				setTodos((prevTodos) => prevTodos.filter((task) => task.id !== taskId));
+			}
+			else
+			{
+				console.error(`Failed to delete task with ID ${taskId}`);
+			}
+		}
+		catch (error)
+		{
+			console.error('Error deleting task:', error);
+		}
+	};
 
     const handleCreateList = async () => {
 		if (newListName.trim())
@@ -230,23 +252,29 @@ const TaskListsContainer = ({ onLogout, user }) => {
 							Tasks in {taskLists.find((list) => list.id === selectedTaskListId)?.name}
 						</Typography>
 
-						<Grid container className="tasks-grid">
-							{todos.length === 0 ? (
-								<Grid item xs={12}>
-									<Typography className="no-tasks-msg">
-										No tasks yet. Start by clicking below to add a task.
-									</Typography>
-								</Grid>
-							) : (
-								todos.map((task) => (
-									<Grid item xs={12} key={task.id}>
-										<Card className="task-item">
-											<Typography>{task.description}</Typography>
-										</Card>
-									</Grid>
-								))
-							)}
+			<Grid container className="tasks-grid">
+				{todos.length === 0 ? (
+					<Grid item xs={12}>
+						<Typography className="no-tasks-msg">
+							No tasks yet. Start by clicking below to add a task.
+						</Typography>
+					</Grid>
+				) : (
+					todos.map((task) => (
+						<Grid item xs={12} key={task.id}>
+							<Card className="task-item">
+								<Typography>{task.description}</Typography>
+								<Button
+									className="delete-task-btn"
+									onClick={() => handleDeleteTask(task.id)}
+								>
+									Delete
+								</Button>
+							</Card>
 						</Grid>
+					))
+				)}
+			</Grid>
 
 						<Box className="inline-task-creation">
 							<TextField

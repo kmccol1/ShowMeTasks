@@ -57,16 +57,33 @@ Builds the app for production in the `build` folder. Minifies and optimizes file
 src/
 │
 ├── components/
-│   ├── Login.js
-│   ├── Register.js
-│   ├── TaskListsContainer.js
+│   ├── Login.jsx
+│   ├── Register.jsx
+│   ├── TaskListsContainer.jsx
+│   ├── ToDoList.jsx
+│	├── ToDoItem.jsx
+│	├── Header.jsx
+│	├── CreateTaskList.jsx
+│	├── AddToDo.jsx
 │   └── ...
 │
 ├── styles/
-│   └── ToDoApp.css
+│   ├── Login.css
+│   ├── Register.css
+│   ├── TaskListsContainer.css
+│   ├── ToDoList.css
+│	├── ToDoItem.css
+│	├── Header.css
+│	├── CreateTaskList.css
+│	├── AddToDo.css
+│   └── ...
 │
 ├── App.js
+├── App.css
+├── App.test.js
+├── index.css
 ├── index.js
+├── ToDoApp.js
 └── ...
 ```
 

@@ -1,3 +1,4 @@
+[![show-me-tasks-ci](https://github.com/kmccol1/ShowMeTasks/actions/workflows/show-me-tasks-ci.yml/badge.svg)](https://github.com/kmccol1/ShowMeTasks/actions/workflows/show-me-tasks-ci.yml)
 # ShowMeTasks
 
 ShowMeTasks is a full-stack to-do list management application built with Java Spring Boot and React. Designed for both individual and collaborative productivity, this secure and scalable platform enables users to manage tasks efficiently with advanced role-based access control and real-time features. The project emphasizes best practices in web security, architecture, and modern UI/UX design.
@@ -6,18 +7,9 @@ ShowMeTasks is a full-stack to-do list management application built with Java Sp
 
 - **User Authentication & Security**:  
   Secure registration and login powered by **JWT (JSON Web Tokens)**, ensuring data integrity and user session security.
-  
-- **Role-Based Access Control (RBAC)**:  
-  Custom access control for different user roles, safeguarding sensitive task data and enhancing collaboration permissions.
 
 - **Task Management**:  
   Create, edit, delete, and organize tasks within multiple task lists, tailored to individual users or shared across teams.
-
-- **Real-time Updates**:  
-  Seamless updates to task lists and items for an interactive, dynamic user experience.
-
-- **Responsive Design**:  
-  Optimized for desktop and mobile devices using **React** and **Material-UI**.
 
 - **Scalable Architecture**:  
   Efficient backend built with **Spring Boot**, ensuring robust performance even with growing user data.

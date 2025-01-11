@@ -20,6 +20,7 @@ import com.kmccol1.to_do_app.payload.TaskListResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -236,19 +237,37 @@ public class ToDoController
         return ResponseEntity.ok(tasks);
     }
 
-    // Delete a task by its ID
+    /**
+     * Deletes a task by its unique ID.
+     * <p>
+     * This endpoint allows the client to delete a task identified by the provided ID.
+     * The task must exist in the system, and the authenticated user must have the necessary
+     * permissions to perform this action.
+     * </p>
+     *
+     * @param taskId the unique identifier of the task to be deleted
+     * @return {@link ResponseEntity} with one of the following:
+     *         <ul>
+     *           <li>{@code 204 No Content} if the task was successfully deleted</li>
+     *           <li>{@code 404 Not Found} if the task with the given ID does not exist</li>
+     *         </ul>
+     * @throws RuntimeException if an unexpected error occurs during task deletion
+     */
     @DeleteMapping("/{taskId}")
     public ResponseEntity<Void> deleteTask(@PathVariable Integer taskId)
     {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("Authenticated user: " + auth.getName());
+        System.out.println("Authorities: " + auth.getAuthorities());
+
         try
         {
-            // Use IntermediaryService to delete the task
             intermediaryService.deleteTaskById(taskId);
-            return ResponseEntity.noContent().build(); // Return 204 No Content
+            return ResponseEntity.noContent().build();
         }
         catch (RuntimeException e)
         {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Return 404 if task not found
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 

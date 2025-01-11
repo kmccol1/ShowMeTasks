@@ -21,24 +21,36 @@ const TaskListsContainer = ({ onLogout, user }) => {
     };
 	
 	const handleDeleteTask = async (taskId) => {
+		if (!taskId)
+		{
+			console.error('Error: No taskId provided for deletion');
+			return;
+		}
+
 		try
 		{
 			const response = await fetch(`http://localhost:8080/api/todos/${taskId}`, {
 				method: 'DELETE',
+				headers: {
+					'Authorization': `Bearer ${user.token}`,
+					'Content-Type': 'application/json',
+				},
 			});
 
 			if (response.ok)
 			{
 				setTodos((prevTodos) => prevTodos.filter((task) => task.id !== taskId));
+				console.log(`Successfully deleted task with ID: ${taskId}`);
 			}
 			else
 			{
-				console.error(`Failed to delete task with ID ${taskId}`);
+				const errorMessage = await response.text();
+				console.error(`Failed to delete task with ID ${taskId}. Server responded with: ${response.status} - ${errorMessage}`);
 			}
 		}
 		catch (error)
 		{
-			console.error('Error deleting task:', error);
+			console.error('Error deleting task: ', error.message || error);
 		}
 	};
 
@@ -57,9 +69,9 @@ const TaskListsContainer = ({ onLogout, user }) => {
 				});
 				const data = await response.json();
 				console.log('Created new task list:', data);
-				setTaskLists((prev) => [...prev, data]); // Add the new list to the state
-				setNewListName(''); // Clear the input field
-				handleClose(); // Close the dialog
+				setTaskLists((prev) => [...prev, data]); // Add the new list to the React state.
+				setNewListName(''); // Clear the input field.
+				handleClose(); // Close the dialog.
 			}
 			catch (error)
 			{
@@ -117,12 +129,12 @@ const TaskListsContainer = ({ onLogout, user }) => {
 
 			if (response.status === 204)
 			{
-				setTodos([]);  // Set an empty array if no tasks are found
+				setTodos([]);  // Set an empty array if no tasks are found.
 				return;
 			}
 
 			const data = await response.json();
-			setTodos(data || []);  // Safeguard for empty or undefined response
+			setTodos(data || []);  // Safeguard for empty or undefined response.
 
 		}
 		catch (error)
@@ -145,7 +157,7 @@ const TaskListsContainer = ({ onLogout, user }) => {
 		{
 			try
 			{
-				// Step 1: Add the new task to the server
+				// Step 1: Add the new task to the server...
 				const response = await fetch(`http://localhost:8080/api/todos/create`, {
 					method: 'POST',
 					headers: {
@@ -165,7 +177,7 @@ const TaskListsContainer = ({ onLogout, user }) => {
 
 				const newTaskData = await response.json();
 
-				// Step 2: Update the UI optimistically
+				// Step 2: Update the UI optimistically.
 				setTaskLists((prevLists) =>
 					prevLists.map((list) =>
 						list.id === selectedTaskListId
@@ -174,13 +186,13 @@ const TaskListsContainer = ({ onLogout, user }) => {
 					)
 				);
 
-				// Update the todos for the selected task list
+				// Update the todos for the selected task list.
 				if (selectedTaskListId)
 				{
 					setTodos((prevTodos) => [...(prevTodos || []), newTaskData]);
 				}
 
-				setNewTask(''); // Clear input field
+				setNewTask(''); // Clear the input field.
 			}
 			catch (error)
 			{
@@ -214,6 +226,7 @@ const TaskListsContainer = ({ onLogout, user }) => {
 							onChange={(e) => setNewListName(e.target.value)}
 							label="Task List Name"
 							fullWidth
+							autoFocus //Manage the focus.
 						/>
 					</DialogContent>
 					<DialogActions>

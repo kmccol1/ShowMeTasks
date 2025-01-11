@@ -26,6 +26,13 @@
     word-wrap: break-word;
 }
 
+.todo-text::before {
+    content: attr(data-number);  /* Use the number as content */
+    margin-right: 8px; /* Space between the number and the description */
+    font-weight: bold; /* Make the number bold */
+    color: #1976d2; /* Change the color of the number to differentiate */
+}
+
 /* Delete Button Styling */
 .delete-button {
     color: #d32f2f;
